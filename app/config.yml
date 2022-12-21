@@ -1,0 +1,13 @@
+name: Mokotest
+version: 0.0.1
+
+httpConf:
+  host: 127.0.0.1
+  port: 8080
+
+dbConf:
+  dsn: host=127.0.0.1 port=5432 user=dwiatmoko password=password dbname=learnecho sslmode=disable TimeZone=Asia/Jakarta
+  maxOpenConns: 5
+  maxIdleConns: 5
+  maxIdleTime: 100
+  dialect: postgres
