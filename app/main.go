@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"learn-echo/config"
+	"learn-echo/factory"
 	"learn-echo/migration"
-	"net/http"
+	"learn-echo/routes"
 
-	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
@@ -18,14 +18,9 @@ func main() {
 
 	// mysql.DBMigration(db)
 
-	e := echo.New()
-	e.GET("/home", func(c echo.Context) error {
-		data := map[string]interface{}{
-			"message": "Welcome !!",
-		}
-
-		return c.JSON(http.StatusOK, data)
-	})
+	// validate := validator.New()
+	presenter := factory.InitFactory(db)
+	e := routes.New(presenter)
 
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
