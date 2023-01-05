@@ -1,8 +1,14 @@
 package migration
 
-import "gorm.io/gorm"
+import (
+	"learn-echo/features/users/model/domain"
 
-var autoMigrateList []interface{}
+	"gorm.io/gorm"
+)
+
+var autoMigrateList = []interface{}{
+	&domain.User{},
+}
 
 func InitMigrate(Db *gorm.DB) {
 	Db.AutoMigrate(autoMigrateList...)
