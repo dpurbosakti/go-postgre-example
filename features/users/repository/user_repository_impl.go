@@ -17,7 +17,7 @@ func NewUserRepository() UserRepository {
 }
 
 func (repository *UserRepositoryImpl) Create(tx *gorm.DB, input domain.User) (domain.User, error) {
-	result := tx.Create(input)
+	result := tx.Create(&input)
 	if result.Error != nil {
 		return domain.User{}, fmt.Errorf("failed to create data %s", source)
 	}
