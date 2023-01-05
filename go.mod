@@ -5,6 +5,8 @@ go 1.18
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
+	github.com/go-playground/mold v2.2.0+incompatible // indirect
+	github.com/go-playground/mold/v4 v4.2.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
@@ -29,6 +31,8 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
+	github.com/segmentio/go-camelcase v0.0.0-20160726192923-7085f1e3c734 // indirect
+	github.com/segmentio/go-snakecase v1.2.0 // indirect
 	github.com/spf13/afero v1.9.3 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
