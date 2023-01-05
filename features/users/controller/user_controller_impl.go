@@ -2,7 +2,6 @@ package controller
 
 import (
 	"context"
-	"fmt"
 	"learn-echo/features/users/model/dto"
 	"learn-echo/features/users/service"
 	ch "learn-echo/pkg/controllerhelper"
@@ -30,23 +29,23 @@ func (controller *UserControllerImpl) Create(c echo.Context) error {
 
 	errBind := c.Bind(&userRequest)
 	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, ch.ResponseOkNoData(fmt.Sprintf("failed: "+errBind.Error())))
+		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
 	}
 
 	err := conform.Struct(context.Background(), &userRequest)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, ch.ResponseOkNoData(fmt.Sprintf("failed: "+errBind.Error())))
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	errVal := c.Validate(&userRequest)
+	errVal := c.Validate(userRequest)
 	// errVal := controller.Validate.Struct(userRequest)
 	if errVal != nil {
-		return c.JSON(http.StatusBadRequest, ch.ResponseOkNoData(fmt.Sprintf("failed: "+errVal.Error())))
+		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
 	result, err := controller.UserService.Create(userRequest)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, ch.ResponseOkNoData("your email or handphone number is already registered"))
+		return echo.NewHTTPError(http.StatusBadRequest, "your email or handphone number is already registered")
 	}
 
 	return c.JSON(http.StatusCreated, ch.ResponseOkWithData("create data user success", result))
