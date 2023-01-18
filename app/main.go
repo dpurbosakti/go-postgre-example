@@ -4,29 +4,39 @@ import (
 	"fmt"
 	"learn-echo/config"
 	"learn-echo/factory"
+	"learn-echo/middlewares"
 	"learn-echo/migration"
 	"learn-echo/routes"
+	"os"
+	"os/signal"
+	"runtime/pprof"
 
-	"github.com/labstack/echo/v4/middleware"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
 	cfg := config.GetConfig()
-	logger := config.InitLogger()
-	db := config.InitDb(cfg, logger)
+	db := config.InitDb(cfg)
 	migration.InitMigrate(db)
 
-	// mysql.DBMigration(db)
-
-	// validate := validator.New()
 	presenter := factory.InitFactory(db)
 	e := routes.New(presenter)
 
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
-	}))
+	e.Use(middlewares.MiddlewareLogging)
 
-	// factory.InitFactory(e, db)
+	//add log when c signal sent
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		for sig := range c {
+			log.WithFields(log.Fields{
+				"status": "closed",
+				"signal": sig,
+			}).Info("Program closed")
+			pprof.StopCPUProfile()
+			os.Exit(1)
+		}
+	}()
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", cfg.HttpConf.Port)))
 }
