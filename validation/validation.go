@@ -18,7 +18,6 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 		// Optionally, you could return the error to give each route more control over the status code
 		report := []string{}
 		errs := err.(validator.ValidationErrors)
-		fmt.Println(errs)
 		for _, err := range errs {
 			switch err.Tag() {
 			case "required":
