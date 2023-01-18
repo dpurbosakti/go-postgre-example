@@ -8,6 +8,7 @@ import (
 func requestToModel(data dto.UserCreateRequest) domain.User {
 	return domain.User{
 		Name:     data.Name,
+		Nik:      data.Nik,
 		Email:    data.Email,
 		Password: data.Password,
 		Phone:    data.Phone,
@@ -20,6 +21,7 @@ func modelToResponse(data domain.User) dto.UserCreateResponse {
 	return dto.UserCreateResponse{
 		ID:        data.ID,
 		Name:      data.Name,
+		Nik:       data.Nik,
 		Email:     data.Email,
 		Phone:     data.Phone,
 		Address:   data.Address,

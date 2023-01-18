@@ -8,6 +8,7 @@ import (
 
 type User struct {
 	ID        uint   `gorm:"primaryKey"`
+	Nik       string `gorm:"type:varchar(16)"`
 	Name      string `gorm:"type:varchar(100)"`
 	Email     string `gorm:"type:varchar(100)"`
 	Password  string `gorm:"type:varchar(100)"`
@@ -18,5 +19,3 @@ type User struct {
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
-
-
