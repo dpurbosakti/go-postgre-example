@@ -40,7 +40,7 @@ func (controller *UserControllerImpl) Create(c echo.Context) error {
 	errVal := c.Validate(userRequest)
 	// errVal := controller.Validate.Struct(userRequest)
 	if errVal != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
+		return echo.NewHTTPError(http.StatusBadRequest, errVal)
 	}
 
 	result, err := controller.UserService.Create(userRequest)
