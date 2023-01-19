@@ -17,7 +17,7 @@ func IsAuthenticated() echo.MiddlewareFunc {
 	})
 }
 
-func CreateToken(input dto.UserCreateResponse) (string, error) {
+func CreateToken(input dto.UserResponse) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["userId"] = input.Id

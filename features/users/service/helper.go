@@ -17,8 +17,8 @@ func requestToModel(data dto.UserCreateRequest) domain.User {
 	}
 }
 
-func modelToResponse(data domain.User) dto.UserCreateResponse {
-	return dto.UserCreateResponse{
+func modelToResponse(data domain.User) dto.UserResponse {
+	return dto.UserResponse{
 		Id:        data.Id,
 		Name:      data.Name,
 		Nik:       data.Nik,
@@ -32,7 +32,7 @@ func modelToResponse(data domain.User) dto.UserCreateResponse {
 	}
 }
 
-func responseToToken(data dto.UserCreateResponse, token string) dto.UserDataToken {
+func responseToToken(data dto.UserResponse, token string) dto.UserDataToken {
 	return dto.UserDataToken{
 		Id:    data.Id,
 		Role:  data.Role,
