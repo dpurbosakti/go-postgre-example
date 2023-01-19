@@ -3,6 +3,7 @@ package service
 import (
 	"learn-echo/features/users/model/dto"
 	"learn-echo/features/users/repository"
+	ph "learn-echo/pkg/passwordhelper"
 
 	"gorm.io/gorm"
 )
@@ -20,6 +21,11 @@ func NewUserService(userRepository repository.UserRepository, db *gorm.DB) UserS
 }
 
 func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.UserCreateResponse, err error) {
+	hashPassword, errHash := ph.HashPassword(input.Password)
+	if errHash != nil {
+		return result, errHash
+	}
+	input.Password = hashPassword
 	data := requestToModel(input)
 	err = service.DB.Transaction(func(tx *gorm.DB) error {
 		resultData, err := service.UserRepository.Create(tx, data)
