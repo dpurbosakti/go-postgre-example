@@ -33,7 +33,7 @@ func ExtractToken(e echo.Context) (result dto.UserDataToken, err error) {
 	user := e.Get("user").(*jwt.Token)
 	if user.Valid {
 		claims := user.Claims.(jwt.MapClaims)
-		result.Id = claims["userId"].(float64)
+		result.Id = claims["userId"].(uint)
 		result.Role = claims["role"].(string)
 		result.Phone = claims["phone"].(string)
 		result.Email = claims["email"].(string)

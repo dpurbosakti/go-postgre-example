@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	"learn-echo/features/users/model/dto"
 	"learn-echo/features/users/service"
 	ch "learn-echo/pkg/controllerhelper"
@@ -38,7 +39,6 @@ func (controller *UserControllerImpl) Create(c echo.Context) error {
 	}
 
 	errVal := c.Validate(userRequest)
-	// errVal := controller.Validate.Struct(userRequest)
 	if errVal != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errVal)
 	}
@@ -49,4 +49,31 @@ func (controller *UserControllerImpl) Create(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, ch.ResponseOkWithData("create data user success", result))
+}
+
+func (controller *UserControllerImpl) Login(c echo.Context) error {
+	var userRequest dto.UserLoginRequest
+
+	errBind := c.Bind(&userRequest)
+	if errBind != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
+	}
+
+	errVal := c.Validate(userRequest)
+	if errVal != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, errVal)
+	}
+
+	result, err := controller.UserService.Login(userRequest)
+	if err != nil {
+		fmt.Println("err: ", err)
+		if err.Error() == "password incorrect" {
+			return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
+		} else {
+
+			return echo.NewHTTPError(http.StatusNotFound, err.Error())
+		}
+	}
+
+	return c.JSON(http.StatusOK, ch.ResponseOkWithData("login success", result))
 }

@@ -17,7 +17,7 @@ type UserCreateRequest struct {
 }
 
 type UserCreateResponse struct {
-	ID        uint           `json:"id"`
+	Id        uint           `json:"id"`
 	Name      string         `json:"name"`
 	Nik       string         `json:"nik"`
 	Email     string         `json:"email"`
@@ -30,10 +30,11 @@ type UserCreateResponse struct {
 }
 
 type UserDataToken struct {
-	Id    string `json:"id"`
+	Id    uint   `json:"id"`
 	Role  string `json:"role"`
 	Phone string `json:"phone"`
 	Email string `json:"email"`
+	Token string `json:"token"`
 }
 
 type UserLoginRequest struct {

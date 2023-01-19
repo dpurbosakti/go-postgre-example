@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"learn-echo/features/users/model/domain"
+	"learn-echo/features/users/model/dto"
 
 	"gorm.io/gorm"
 )
@@ -23,4 +24,14 @@ func (repository *UserRepositoryImpl) Create(tx *gorm.DB, input domain.User) (do
 	}
 
 	return input, nil
+}
+
+func (repository *UserRepositoryImpl) Login(tx *gorm.DB, input dto.UserLoginRequest) (domain.User, error) {
+	var user domain.User
+	result := tx.Where("\"Email\" = ?", input.Email).First(&user)
+	if result.Error != nil {
+		return domain.User{}, fmt.Errorf("data user dengan email %s tidak ditemukan", input.Email)
+	}
+
+	return user, nil
 }
