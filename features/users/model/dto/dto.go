@@ -28,3 +28,15 @@ type UserCreateResponse struct {
 	UpdatedAt time.Time      `json:"updatedAt"`
 	DeletedAt gorm.DeletedAt `json:"deletedAt"`
 }
+
+type UserDataToken struct {
+	Id    string `json:"id"`
+	Role  string `json:"role"`
+	Phone string `json:"phone"`
+	Email string `json:"email"`
+}
+
+type UserLoginRequest struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
