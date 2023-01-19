@@ -13,8 +13,7 @@ func New(presenter factory.Presenter) *echo.Echo {
 
 	e.Validator = &validation.CustomValidator{Validator: validation.InitValidator()}
 
-	//users
-	e.POST("/user", presenter.UserPresenter.Create)
+	//index
 	e.GET("/home", func(c echo.Context) error {
 		data := map[string]interface{}{
 			"message": "Welcome !!",
@@ -22,5 +21,10 @@ func New(presenter factory.Presenter) *echo.Echo {
 
 		return c.JSON(http.StatusOK, data)
 	})
+
+	//users
+	e.POST("/signup", presenter.UserPresenter.Create)
+	e.POST("/login", presenter.UserPresenter.Login)
+
 	return e
 }
