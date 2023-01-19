@@ -24,7 +24,7 @@ func NewUserService(userRepository repository.UserRepository, db *gorm.DB) UserS
 	}
 }
 
-func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.UserCreateResponse, err error) {
+func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.UserResponse, err error) {
 	hashPassword, errHash := ph.HashPassword(input.Password)
 	if errHash != nil {
 		return result, errHash
@@ -40,7 +40,7 @@ func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.
 		return nil
 	})
 	if err != nil {
-		return dto.UserCreateResponse{}, err
+		return dto.UserResponse{}, err
 	}
 
 	return result, nil

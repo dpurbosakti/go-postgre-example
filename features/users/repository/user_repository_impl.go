@@ -28,7 +28,7 @@ func (repository *UserRepositoryImpl) Create(tx *gorm.DB, input domain.User) (do
 
 func (repository *UserRepositoryImpl) Login(tx *gorm.DB, input dto.UserLoginRequest) (domain.User, error) {
 	var user domain.User
-	result := tx.Where("\"Email\" = ?", input.Email).First(&user)
+	result := tx.Where("email = ?", input.Email).First(&user)
 	if result.Error != nil {
 		return domain.User{}, fmt.Errorf("data user dengan email %s tidak ditemukan", input.Email)
 	}

@@ -5,7 +5,6 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/schema"
 )
 
 type DbConf struct {
@@ -44,12 +43,7 @@ func InitDb(c *Config) (DB *gorm.DB) {
 		gormD = postgres.Open(c.DbConf.Dsn)
 	}
 
-	db, err := gorm.Open(gormD, &gorm.Config{
-		NamingStrategy: schema.NamingStrategy{
-			SingularTable: true,
-			NoLowerCase:   true,
-		},
-	})
+	db, err := gorm.Open(gormD, &gorm.Config{})
 	if err != nil {
 		log.WithFields(log.Fields{
 			"type":    "db",

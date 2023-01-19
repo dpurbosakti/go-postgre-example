@@ -16,7 +16,7 @@ type UserCreateRequest struct {
 	Role     string `json:"role" validate:"required"`
 }
 
-type UserCreateResponse struct {
+type UserResponse struct {
 	Id        uint           `json:"id"`
 	Name      string         `json:"name"`
 	Nik       string         `json:"nik"`
