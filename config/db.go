@@ -19,13 +19,7 @@ type DbConf struct {
 func InitDb(c *Config) (DB *gorm.DB) {
 
 	if c.DbConf.Dsn == "" {
-		// logger.Info("instantiation",
-		// 	zap.String("type", "db"),
-		// 	zap.String("source", "gorm"),
-		// 	zap.String("status", "unset"),
-		// 	zap.String("message", "no DSN provided"))
 		log.WithFields(log.Fields{
-			// "at":      time.Now().Format("2006-01-02 15:04:05"),
 			"type":    "db",
 			"source":  "gorm",
 			"status":  "unset",
@@ -34,13 +28,7 @@ func InitDb(c *Config) (DB *gorm.DB) {
 		return
 	}
 	if c.DbConf.Dialect != "mysql" && c.DbConf.Dialect != "postgres" {
-		// logger.Info("instantiation",
-		// 	zap.String("type", "db"),
-		// 	zap.String("source", "gorm"),
-		// 	zap.String("status", "unset"),
-		// 	zap.String("message", "no proper dialect provided"))
 		log.WithFields(log.Fields{
-			// "at":      time.Now().Format("2006-01-02 15:04:05"),
 			"type":    "db",
 			"source":  "gorm",
 			"status":  "unset",
@@ -63,10 +51,7 @@ func InitDb(c *Config) (DB *gorm.DB) {
 		},
 	})
 	if err != nil {
-		// logger.Panic("instantiation", zap.String("type", "db"), zap.String("source", "gorm"), zap.String("status", "panic"))
-		// panic("Failed to connect to database!")
 		log.WithFields(log.Fields{
-			// "at":      time.Now().Format("2006-01-02 15:04:05"),
 			"type":    "db",
 			"source":  "gorm",
 			"status":  "panic",
@@ -75,13 +60,7 @@ func InitDb(c *Config) (DB *gorm.DB) {
 		log.Panic(err)
 	} else {
 		DB = db
-		// logger.Info("instantiation",
-		// 	zap.String("type", "db"),
-		// 	zap.String("source", "gorm"),
-		// 	zap.String("status", "done"),
-		// 	zap.String("name", "db"))
 		log.WithFields(log.Fields{
-			// "at":     time.Now().Format("2006-01-02 15:04:05"),
 			"type":   "db",
 			"source": "gorm",
 			"status": "done",
