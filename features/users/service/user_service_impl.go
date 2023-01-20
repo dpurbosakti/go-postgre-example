@@ -5,6 +5,7 @@ import (
 	"learn-echo/features/users/model/dto"
 	"learn-echo/features/users/repository"
 	"learn-echo/middlewares"
+	"learn-echo/pkg/pagination"
 	ph "learn-echo/pkg/passwordhelper"
 
 	"fmt"
@@ -32,11 +33,11 @@ func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.
 	input.Password = hashPassword
 	data := requestToModel(input)
 	err = service.DB.Transaction(func(tx *gorm.DB) error {
-		resultData, err := service.UserRepository.Create(tx, data)
+		resultRepo, err := service.UserRepository.Create(tx, data)
 		if err != nil {
 			return err
 		}
-		result = modelToResponse(resultData)
+		result = modelToResponse(resultRepo)
 		return nil
 	})
 	if err != nil {
@@ -72,5 +73,37 @@ func (service *UserServiceImpl) Login(input dto.UserLoginRequest) (result dto.Us
 	}
 
 	result = responseToToken(dataToken, token)
+	return result, nil
+}
+
+func (service *UserServiceImpl) GetDetail(userId int) (result dto.UserResponse, err error) {
+	err = service.DB.Transaction(func(tx *gorm.DB) error {
+		resultRepo, err := service.UserRepository.GetDetail(tx, userId)
+		if err != nil {
+			return err
+		}
+		result = modelToResponse(resultRepo)
+		return nil
+	})
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+func (service *UserServiceImpl) GetList(page pagination.Pagination) (result pagination.Pagination, err error) {
+	err = service.DB.Transaction(func(tx *gorm.DB) error {
+		resultRepo, err := service.UserRepository.GetList(tx, page)
+		if err != nil {
+			return err
+		}
+		result = resultRepo
+		return nil
+	})
+	if err != nil {
+		return result, err
+	}
+
 	return result, nil
 }
