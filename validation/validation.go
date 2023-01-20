@@ -52,10 +52,16 @@ func nikValidator(fl validator.FieldLevel) bool {
 	return result
 }
 
+// func sortPagination(fl validator.FieldLevel) bool {
+// 	sort := fl.Field().String()
+// 	return !strings.Contains(sort, ";")
+// }
+
 func InitValidator() *validator.Validate {
 	validate := validator.New()
 
 	validate.RegisterValidation("nik", nikValidator)
+	// validate.RegisterValidation("sort", sortPagination)
 	return validate
 }
 

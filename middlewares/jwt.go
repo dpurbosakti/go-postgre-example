@@ -23,7 +23,7 @@ func CreateToken(input dto.UserResponse) (string, error) {
 	claims["userId"] = input.Id
 	claims["role"] = input.Role
 	claims["exp"] = time.Now().Add(time.Hour * 504).Unix()
-	claims["handphone"] = input.Phone
+	claims["phone"] = input.Phone
 	claims["email"] = input.Email
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte("secret"))
@@ -33,7 +33,7 @@ func ExtractToken(e echo.Context) (result dto.UserDataToken, err error) {
 	user := e.Get("user").(*jwt.Token)
 	if user.Valid {
 		claims := user.Claims.(jwt.MapClaims)
-		result.Id = claims["userId"].(uint)
+		result.Id = uint(claims["userId"].(float64))
 		result.Role = claims["role"].(string)
 		result.Phone = claims["phone"].(string)
 		result.Email = claims["email"].(string)

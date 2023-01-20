@@ -2,11 +2,13 @@ package controller
 
 import (
 	"context"
-	"fmt"
 	"learn-echo/features/users/model/dto"
 	"learn-echo/features/users/service"
+	"learn-echo/middlewares"
 	ch "learn-echo/pkg/controllerhelper"
+	"learn-echo/pkg/pagination"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/mold/v4/modifiers"
 	"github.com/labstack/echo/v4"
@@ -66,7 +68,6 @@ func (controller *UserControllerImpl) Login(c echo.Context) error {
 
 	result, err := controller.UserService.Login(userRequest)
 	if err != nil {
-		fmt.Println("err: ", err)
 		if err.Error() == "password incorrect" {
 			return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 		} else {
@@ -76,4 +77,35 @@ func (controller *UserControllerImpl) Login(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, ch.ResponseOkWithData("login success", result))
+}
+
+func (controller *UserControllerImpl) GetDetail(c echo.Context) error {
+	dataToken, _ := middlewares.ExtractToken(c)
+	result, err := controller.UserService.GetDetail(int(dataToken.Id))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, err)
+	}
+
+	return c.JSON(http.StatusOK, ch.ResponseOkWithData("get data user success", result))
+}
+
+func (controller *UserControllerImpl) GetList(c echo.Context) error {
+	var page pagination.Pagination
+	limitInt, _ := strconv.Atoi(c.QueryParam("limit"))
+	pageInt, _ := strconv.Atoi(c.QueryParam("page"))
+	page.Limit = limitInt
+	page.Page = pageInt
+	page.Sort = c.QueryParam("sort")
+
+	errVal := c.Validate(page)
+	if errVal != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, errVal)
+	}
+
+	result, err := controller.UserService.GetList(page)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, err)
+	}
+
+	return c.JSON(http.StatusOK, ch.ResponseOkWithData("get data users success", result))
 }

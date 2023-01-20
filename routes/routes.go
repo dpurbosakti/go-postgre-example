@@ -2,6 +2,7 @@ package routes
 
 import (
 	"learn-echo/factory"
+	"learn-echo/middlewares"
 	"learn-echo/validation"
 	"net/http"
 
@@ -25,6 +26,8 @@ func New(presenter factory.Presenter) *echo.Echo {
 	//users
 	e.POST("/signup", presenter.UserPresenter.Create)
 	e.POST("/login", presenter.UserPresenter.Login)
+	e.GET("/user", presenter.UserPresenter.GetDetail, middlewares.IsAuthenticated())
+	e.GET("/users", presenter.UserPresenter.GetList)
 
 	return e
 }
