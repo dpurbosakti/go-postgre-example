@@ -11,6 +11,7 @@ import (
 	"os/signal"
 	"runtime/pprof"
 
+	"github.com/labstack/echo/v4/middleware"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -22,7 +23,9 @@ func main() {
 	presenter := factory.InitFactory(db)
 	e := routes.New(presenter)
 
-	e.Use(middlewares.MiddlewareLogging)
+	e.Use(middlewares.LogMiddleware)
+	e.Use(middlewares.CorsMiddleware())
+	e.Pre(middleware.RemoveTrailingSlash())
 
 	//add log when c signal sent
 	c := make(chan os.Signal, 1)
