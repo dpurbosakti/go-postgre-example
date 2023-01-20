@@ -97,10 +97,10 @@ func (controller *UserControllerImpl) GetList(c echo.Context) error {
 	page.Page = pageInt
 	page.Sort = c.QueryParam("sort")
 
-	errVal := c.Validate(page)
-	if errVal != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, errVal)
-	}
+	// errVal := c.Validate(page)
+	// if errVal != nil {
+	// 	return echo.NewHTTPError(http.StatusBadRequest, errVal)
+	// }
 
 	result, err := controller.UserService.GetList(page)
 	if err != nil {

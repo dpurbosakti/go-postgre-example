@@ -23,7 +23,7 @@ func makeLogEntry(c echo.Context) *log.Entry {
 	})
 }
 
-func MiddlewareLogging(next echo.HandlerFunc) echo.HandlerFunc {
+func LogMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		makeLogEntry(c).Info("incoming request")
 		return next(c)
