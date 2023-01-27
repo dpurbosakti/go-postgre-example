@@ -33,7 +33,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 				report = append(report, fmt.Sprintf("%s value must be lower than %s",
 					err.Field(), err.Param()))
 			case "nik":
-				report = append(report, fmt.Sprintf("%s was not in correct format e.g 3514141904940002",
+				report = append(report, fmt.Sprintf("%s was not in correct format e.g 3514142206950001",
 					err.Value()))
 			}
 

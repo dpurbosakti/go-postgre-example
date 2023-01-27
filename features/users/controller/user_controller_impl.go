@@ -97,14 +97,13 @@ func (controller *UserControllerImpl) GetList(c echo.Context) error {
 	page.Page = pageInt
 	page.Sort = c.QueryParam("sort")
 
-	// errVal := c.Validate(page)
-	// if errVal != nil {
-	// 	return echo.NewHTTPError(http.StatusBadRequest, errVal)
-	// }
-
 	result, err := controller.UserService.GetList(page)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, err)
+	}
+
+	if result.TotalRows == 0 {
+		return echo.NewHTTPError(http.StatusNotFound, "data not found")
 	}
 
 	return c.JSON(http.StatusOK, ch.ResponseOkWithData("get data users success", result))
