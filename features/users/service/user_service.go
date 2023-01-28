@@ -10,4 +10,5 @@ type UserService interface {
 	Login(input dto.UserLoginRequest) (result dto.UserDataToken, err error)
 	GetDetail(userId int) (result dto.UserResponse, err error)
 	GetList(page pagination.Pagination) (result pagination.Pagination, err error)
+	Delete(userId int) (err error)
 }

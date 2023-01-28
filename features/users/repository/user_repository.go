@@ -14,5 +14,5 @@ type UserRepository interface {
 	GetDetail(tx *gorm.DB, userId int) (domain.User, error)
 	GetList(tx *gorm.DB, pagination pagination.Pagination) (pagination.Pagination, error)
 	// Update(tx *gorm.DB, input domain.User) (any, error)
-	// Delete(tx *gorm.DB) (any, error)
+	Delete(tx *gorm.DB, userId int) error
 }

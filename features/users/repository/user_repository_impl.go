@@ -55,3 +55,13 @@ func (repository UserRepositoryImpl) GetList(tx *gorm.DB, page pagination.Pagina
 
 	return page, nil
 }
+
+func (repository UserRepositoryImpl) Delete(tx *gorm.DB, userId int) error {
+	var user domain.User
+	result := tx.Delete(&user, userId)
+	if result.Error != nil {
+		return fmt.Errorf("data user dengan user id %d tidak ditemukan", userId)
+	}
+
+	return nil
+}
