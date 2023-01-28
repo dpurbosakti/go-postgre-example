@@ -81,7 +81,8 @@ func (controller *UserControllerImpl) Login(c echo.Context) error {
 
 func (controller *UserControllerImpl) GetDetail(c echo.Context) error {
 	dataToken, _ := middlewares.ExtractToken(c)
-	result, err := controller.UserService.GetDetail(int(dataToken.Id))
+	userId := int(dataToken.Id)
+	result, err := controller.UserService.GetDetail(userId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, err)
 	}
@@ -107,4 +108,15 @@ func (controller *UserControllerImpl) GetList(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, ch.ResponseOkWithData("get data users success", result))
+}
+
+func (controller *UserControllerImpl) Delete(c echo.Context) error {
+	dataToken, _ := middlewares.ExtractToken(c)
+	userId := int(dataToken.Id)
+	err := controller.UserService.Delete(userId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, err)
+	}
+
+	return c.JSON(http.StatusOK, ch.ResponseOkNoData("delete data user success"))
 }

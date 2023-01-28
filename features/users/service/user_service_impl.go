@@ -107,3 +107,18 @@ func (service *UserServiceImpl) GetList(page pagination.Pagination) (result pagi
 
 	return result, nil
 }
+
+func (service *UserServiceImpl) Delete(userId int) (err error) {
+	err = service.DB.Transaction(func(tx *gorm.DB) error {
+		err := service.UserRepository.Delete(tx, userId)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
