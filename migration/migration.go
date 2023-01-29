@@ -6,10 +6,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var autoMigrateList = []interface{}{
-	&domain.User{},
-}
-
 func InitMigrate(Db *gorm.DB) {
-	Db.AutoMigrate(autoMigrateList...)
+	Db.AutoMigrate(&domain.User{})
 }

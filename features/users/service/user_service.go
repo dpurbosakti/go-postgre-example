@@ -11,4 +11,5 @@ type UserService interface {
 	GetDetail(userId int) (result dto.UserResponse, err error)
 	GetList(page pagination.Pagination) (result pagination.Pagination, err error)
 	Delete(userId int) (err error)
+	Update(input dto.UserUpdateRequest, userId int) (result dto.UserResponse, err error)
 }

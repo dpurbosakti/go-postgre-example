@@ -28,6 +28,7 @@ func New(presenter factory.Presenter) *echo.Echo {
 	e.POST("/login", presenter.UserPresenter.Login)
 	e.GET("/user", presenter.UserPresenter.GetDetail, middlewares.IsAuthenticated())
 	e.DELETE("/user", presenter.UserPresenter.Delete, middlewares.IsAuthenticated())
+	e.PUT("/user", presenter.UserPresenter.Update, middlewares.IsAuthenticated())
 	e.GET("/users", presenter.UserPresenter.GetList)
 
 	return e

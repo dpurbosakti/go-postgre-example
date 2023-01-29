@@ -8,4 +8,5 @@ type UserController interface {
 	GetDetail(c echo.Context) error
 	GetList(c echo.Context) error
 	Delete(c echo.Context) error
+	Update(c echo.Context) error
 }

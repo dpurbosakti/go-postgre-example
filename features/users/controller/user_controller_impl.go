@@ -120,3 +120,27 @@ func (controller *UserControllerImpl) Delete(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, ch.ResponseOkNoData("delete data user success"))
 }
+
+func (controller *UserControllerImpl) Update(c echo.Context) error {
+	var userRequest dto.UserUpdateRequest
+	conform := modifiers.New()
+
+	errBind := c.Bind(&userRequest)
+	if errBind != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
+	}
+
+	err := conform.Struct(context.Background(), &userRequest)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	dataToken, _ := middlewares.ExtractToken(c)
+	userId := int(dataToken.Id)
+	result, err := controller.UserService.Update(userRequest, userId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, err)
+	}
+
+	return c.JSON(http.StatusOK, ch.ResponseOkWithData("update data users success", result))
+}
