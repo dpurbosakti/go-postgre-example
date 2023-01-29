@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"learn-echo/features/users/model/domain"
 	"learn-echo/features/users/model/dto"
@@ -38,13 +39,13 @@ func (repository *UserRepositoryImpl) Login(tx *gorm.DB, input dto.UserLoginRequ
 }
 
 func (repository *UserRepositoryImpl) GetDetail(tx *gorm.DB, userId int) (domain.User, error) {
-	var user domain.User
+	var user *domain.User
 	result := tx.First(&user, userId)
 	if result.Error != nil {
 		return domain.User{}, fmt.Errorf("data user dengan user id %d tidak ditemukan", userId)
 	}
 
-	return user, nil
+	return *user, nil
 }
 
 func (repository UserRepositoryImpl) GetList(tx *gorm.DB, page pagination.Pagination) (pagination.Pagination, error) {
@@ -64,4 +65,14 @@ func (repository UserRepositoryImpl) Delete(tx *gorm.DB, userId int) error {
 	}
 
 	return nil
+}
+
+func (repository UserRepositoryImpl) Update(tx *gorm.DB, input domain.User) (domain.User, error) {
+	fmt.Println("input: ", input.Id)
+	result := tx.Save(&input)
+	if result.Error != nil {
+		return domain.User{}, errors.New("gagal memperbarui dan menyimpan data user")
+	}
+
+	return input, nil
 }

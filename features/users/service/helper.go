@@ -5,7 +5,7 @@ import (
 	"learn-echo/features/users/model/dto"
 )
 
-func requestToModel(data dto.UserCreateRequest) domain.User {
+func createRequestToModel(data dto.UserCreateRequest) domain.User {
 	return domain.User{
 		Name:     data.Name,
 		Nik:      data.Nik,
@@ -13,7 +13,6 @@ func requestToModel(data dto.UserCreateRequest) domain.User {
 		Password: data.Password,
 		Phone:    data.Phone,
 		Address:  data.Address,
-		Role:     data.Role,
 	}
 }
 
@@ -26,6 +25,7 @@ func modelToResponse(data domain.User) dto.UserResponse {
 		Phone:     data.Phone,
 		Address:   data.Address,
 		Role:      data.Role,
+		Status:    data.Status,
 		CreatedAt: data.CreatedAt,
 		UpdatedAt: data.UpdatedAt,
 		DeletedAt: data.DeletedAt,
@@ -41,3 +41,12 @@ func responseToToken(data dto.UserResponse, token string) dto.UserDataToken {
 		Token: token,
 	}
 }
+
+// func updateRequestToModel(data dto.UserUpdateRequest) domain.User {
+// 	return domain.User{
+// 		Name:     *data.Name,
+// 		Password: *data.Password,
+// 		Phone:    *data.Phone,
+// 		Address:  *data.Address,
+// 	}
+// }

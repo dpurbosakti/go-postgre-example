@@ -1,21 +1,23 @@
 package domain
 
 import (
+	"learn-echo/features/users/model/types"
 	"time"
 
 	"gorm.io/gorm"
 )
 
 type User struct {
-	Id        uint           `json:"id" gorm:"primaryKey"`
-	Nik       string         `json:"nik" gorm:"unique"`
-	Name      string         `json:"name" gorm:"type:varchar(100)"`
-	Email     string         `json:"email" gorm:"unique"`
-	Password  string         `json:"password" gorm:"type:varchar(300)"`
-	Phone     string         `json:"phone" gorm:"unique"`
-	Address   string         `json:"address" gorm:"type:varchar(100)"`
-	Role      string         `json:"role" gorm:"type:varchar(100)"`
-	CreatedAt time.Time      `json:"createdAt"`
-	UpdatedAt time.Time      `json:"updatedAt"`
-	DeletedAt gorm.DeletedAt `json:"deletedAt" gorm:"index"`
+	Id        uint             `json:"id" gorm:"primaryKey"`
+	Nik       string           `json:"nik" gorm:"unique"`
+	Name      string           `json:"name" gorm:"type:varchar(100)"`
+	Email     string           `json:"email" gorm:"unique"`
+	Password  string           `json:"password" gorm:"type:varchar(300)"`
+	Phone     string           `json:"phone" gorm:"unique"`
+	Address   string           `json:"address" gorm:"type:varchar(100)"`
+	Role      string           `json:"role" gorm:"type:varchar(100)"`
+	Status    types.UserStatus `json:"userStatus"`
+	CreatedAt time.Time        `json:"createdAt"`
+	UpdatedAt time.Time        `json:"updatedAt"`
+	DeletedAt gorm.DeletedAt   `json:"deletedAt" gorm:"index"`
 }

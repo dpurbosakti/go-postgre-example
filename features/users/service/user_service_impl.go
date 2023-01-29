@@ -8,6 +8,8 @@ import (
 	"learn-echo/pkg/pagination"
 	ph "learn-echo/pkg/passwordhelper"
 
+	"github.com/jinzhu/copier"
+
 	"fmt"
 
 	"gorm.io/gorm"
@@ -31,7 +33,7 @@ func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.
 		return result, errHash
 	}
 	input.Password = hashPassword
-	data := requestToModel(input)
+	data := createRequestToModel(input)
 	err = service.DB.Transaction(func(tx *gorm.DB) error {
 		resultRepo, err := service.UserRepository.Create(tx, data)
 		if err != nil {
@@ -121,4 +123,38 @@ func (service *UserServiceImpl) Delete(userId int) (err error) {
 	}
 
 	return nil
+}
+
+func (service *UserServiceImpl) Update(input dto.UserUpdateRequest, userId int) (result dto.UserResponse, err error) {
+	if input.Password != nil {
+		hashPassword, errHash := ph.HashPassword(*input.Password)
+		if errHash != nil {
+			return result, errHash
+		}
+		input.Password = &hashPassword
+	}
+
+	err = service.DB.Transaction(func(tx *gorm.DB) error {
+		resultGet, err := service.UserRepository.GetDetail(tx, userId)
+		if err != nil {
+			return err
+		}
+		fmt.Println(resultGet.Id)
+		err = copier.Copy(&resultGet, &input)
+		if err != nil {
+			return err
+		}
+		fmt.Println(resultGet.Id)
+		resultUpdate, err := service.UserRepository.Update(tx, resultGet)
+		if err != nil {
+			return err
+		}
+		result = modelToResponse(resultUpdate)
+		return nil
+	})
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
 }
