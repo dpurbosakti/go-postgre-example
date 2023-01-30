@@ -35,6 +35,9 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 			case "nik":
 				report = append(report, fmt.Sprintf("%s was not in correct format e.g 3514142206950001",
 					err.Value()))
+			case "phone":
+				report = append(report, fmt.Sprintf("%s was not in correct format e.g 085865968948",
+					err.Value()))
 			}
 
 		}
@@ -52,6 +55,15 @@ func nikValidator(fl validator.FieldLevel) bool {
 	return result
 }
 
+func phoneValidator(fl validator.FieldLevel) bool {
+	phone := fl.Field().String()
+	regex := regexp.MustCompile(`^(\+62|62|0)[2-9][1-9][0-9]{6,10}$`)
+
+	result := regex.MatchString(phone)
+
+	return result
+}
+
 // func sortPagination(fl validator.FieldLevel) bool {
 // 	sort := fl.Field().String()
 // 	return !strings.Contains(sort, ";")
@@ -61,6 +73,7 @@ func InitValidator() *validator.Validate {
 	validate := validator.New()
 
 	validate.RegisterValidation("nik", nikValidator)
+	validate.RegisterValidation("phone", phoneValidator)
 	// validate.RegisterValidation("sort", sortPagination)
 	return validate
 }

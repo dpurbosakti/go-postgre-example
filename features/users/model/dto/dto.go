@@ -12,14 +12,14 @@ type UserCreateRequest struct {
 	Nik      string `json:"nik" validate:"nik"`
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" mod:"trim" validate:"required"`
-	Phone    string `json:"phone" validate:"required"`
+	Phone    string `json:"phone" validate:"phone,required"`
 	Address  string `json:"address" validate:"required"`
 }
 
 type UserUpdateRequest struct {
 	Name     *string `json:"name"`
 	Password *string `json:"password" mod:"trim"`
-	Phone    *string `json:"phone"`
+	Phone    *string `json:"phone" validate:"phone"`
 	Address  *string `json:"address"`
 }
 

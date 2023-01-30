@@ -1,8 +1,8 @@
 package types
 
-type UserStatus string
+type UserStatus int
 
 const (
-	UserStatusUnverfied UserStatus = "0"
-	UserStatusVerfied   UserStatus = "1"
+	UserStatusUnverfied UserStatus = 0
+	UserStatusVerfied   UserStatus = 1
 )
