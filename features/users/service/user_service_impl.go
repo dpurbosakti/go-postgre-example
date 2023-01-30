@@ -3,6 +3,7 @@ package service
 import (
 	"learn-echo/features/users/model/domain"
 	"learn-echo/features/users/model/dto"
+	"learn-echo/features/users/model/types"
 	"learn-echo/features/users/repository"
 	"learn-echo/middlewares"
 	"learn-echo/pkg/pagination"
@@ -34,6 +35,7 @@ func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.
 	}
 	input.Password = hashPassword
 	data := createRequestToModel(input)
+	data.Status = types.UserStatusUnverfied
 	err = service.DB.Transaction(func(tx *gorm.DB) error {
 		resultRepo, err := service.UserRepository.Create(tx, data)
 		if err != nil {
