@@ -15,4 +15,7 @@ type UserRepository interface {
 	GetList(tx *gorm.DB, pagination pagination.Pagination) (pagination.Pagination, error)
 	Update(tx *gorm.DB, input domain.User) (domain.User, error)
 	Delete(tx *gorm.DB, userId int) error
+	CheckDuplicate(tx *gorm.DB, input domain.User) error
+	CheckEmail(tx *gorm.DB, input dto.UserVerifyRequest) (domain.User, error)
+	Save(tx *gorm.DB, input domain.User) error
 }

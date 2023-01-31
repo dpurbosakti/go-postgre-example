@@ -12,4 +12,5 @@ type UserService interface {
 	GetList(page pagination.Pagination) (result pagination.Pagination, err error)
 	Delete(userId int) (err error)
 	Update(input dto.UserUpdateRequest, userId int) (result dto.UserResponse, err error)
+	Verify(input dto.UserVerifyRequest) (err error)
 }

@@ -41,6 +41,10 @@ func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.
 	data.IsVerified = false
 	data.VerCode = verCode
 	err = service.DB.Transaction(func(tx *gorm.DB) error {
+		err := service.UserRepository.CheckDuplicate(tx, data)
+		if err != nil {
+			return err
+		}
 		resultRepo, err := service.UserRepository.Create(tx, data)
 		if err != nil {
 			return err
@@ -72,9 +76,13 @@ func (service *UserServiceImpl) Login(input dto.UserLoginRequest) (result dto.Us
 	if err != nil {
 		return result, err
 	}
+
+	if !resultData.IsVerified {
+		return result, errors.New("account is unverified")
+	}
 	errCrypt := ph.ComparePassword(resultData.Password, input.Password)
 	if errCrypt != nil {
-		return result, fmt.Errorf("password incorrect")
+		return result, errors.New("password incorrect")
 	}
 
 	dataToken := modelToResponse(resultData)
@@ -166,4 +174,30 @@ func (service *UserServiceImpl) Update(input dto.UserUpdateRequest, userId int) 
 	}
 
 	return result, nil
+}
+
+func (service *UserServiceImpl) Verify(input dto.UserVerifyRequest) (err error) {
+	err = service.DB.Transaction(func(tx *gorm.DB) error {
+		result, err := service.UserRepository.CheckEmail(tx, input)
+		if err != nil {
+			return err
+		}
+		if result.VerCode != input.VerCode {
+			return errors.New("the verification code you entered is incorrect")
+		}
+
+		result.IsVerified = true
+		errSave := service.UserRepository.Save(tx, result)
+		if errSave != nil {
+			return errSave
+		}
+
+		return nil
+	})
+	if err != nil {
+		fmt.Println("error", err.Error())
+		return err
+	}
+
+	return nil
 }

@@ -144,3 +144,24 @@ func (controller *UserControllerImpl) Update(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, ch.ResponseOkWithData("update data users success", result))
 }
+
+func (controller *UserControllerImpl) Verify(c echo.Context) error {
+	var userRequest dto.UserVerifyRequest
+
+	errBind := c.Bind(&userRequest)
+	if errBind != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
+	}
+
+	errVal := c.Validate(userRequest)
+	if errVal != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, errVal)
+	}
+
+	err := controller.UserService.Verify(userRequest)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, ch.ResponseOkNoData("account is verified"))
+}
