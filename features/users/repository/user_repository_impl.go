@@ -76,3 +76,45 @@ func (repository UserRepositoryImpl) Update(tx *gorm.DB, input domain.User) (dom
 
 	return input, nil
 }
+
+func (repository UserRepositoryImpl) CheckDuplicate(tx *gorm.DB, input domain.User) error {
+	var count int64
+	if resultEmail := tx.Model(&domain.User{}).Where("email = ? ", input.Email).Count(&count); resultEmail.Error != nil {
+		return errors.New("error checking email")
+	}
+	if count > 0 {
+		return errors.New("email already exists in database")
+	}
+	if resultNik := tx.Model(&domain.User{}).Where("nik = ? ", input.Nik).Count(&count); resultNik.Error != nil {
+		return errors.New("error checking nik")
+	}
+	if count > 0 {
+		return errors.New("nik already exists in database")
+	}
+	if resultPhone := tx.Model(&domain.User{}).Where("phone = ? ", input.Phone).Count(&count); resultPhone.Error != nil {
+		return errors.New("error checking phone")
+	}
+	if count > 0 {
+		return errors.New("phone already exists in database")
+	}
+
+	return nil
+}
+
+func (repository UserRepositoryImpl) CheckEmail(tx *gorm.DB, input dto.UserVerifyRequest) (domain.User, error) {
+	var user domain.User
+	result := tx.Where("email = ?", input.Email).First(&user)
+	if result.Error != nil {
+		return domain.User{}, errors.New("error checking email")
+	}
+	return user, nil
+}
+
+func (repository UserRepositoryImpl) Save(tx *gorm.DB, input domain.User) error {
+	result := tx.Save(input)
+	if result.Error != nil {
+		return errors.New("failed to save data")
+	}
+
+	return nil
+}

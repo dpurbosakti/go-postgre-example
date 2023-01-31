@@ -30,6 +30,7 @@ func New(presenter factory.Presenter) *echo.Echo {
 	e.DELETE("/user", presenter.UserPresenter.Delete, middlewares.IsAuthenticated())
 	e.PUT("/user", presenter.UserPresenter.Update, middlewares.IsAuthenticated())
 	e.GET("/users", presenter.UserPresenter.GetList)
+	e.POST("/users/verify", presenter.UserPresenter.Verify)
 
 	return e
 }
