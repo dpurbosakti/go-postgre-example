@@ -1,7 +1,6 @@
 package dto
 
 import (
-	"learn-echo/features/users/model/types"
 	"time"
 
 	"gorm.io/gorm"
@@ -24,17 +23,17 @@ type UserUpdateRequest struct {
 }
 
 type UserResponse struct {
-	Id        uint             `json:"id"`
-	Name      string           `json:"name"`
-	Nik       string           `json:"nik"`
-	Email     string           `json:"email"`
-	Phone     string           `json:"phone"`
-	Address   string           `json:"address"`
-	Role      string           `json:"role"`
-	Status    types.UserStatus `json:"status"`
-	CreatedAt time.Time        `json:"createdAt"`
-	UpdatedAt time.Time        `json:"updatedAt"`
-	DeletedAt gorm.DeletedAt   `json:"deletedAt"`
+	Id         uint           `json:"id"`
+	Name       string         `json:"name"`
+	Nik        string         `json:"nik"`
+	Email      string         `json:"email"`
+	Phone      string         `json:"phone"`
+	Address    string         `json:"address"`
+	Role       string         `json:"role"`
+	IsVerified bool           `json:"status"`
+	CreatedAt  time.Time      `json:"createdAt"`
+	UpdatedAt  time.Time      `json:"updatedAt"`
+	DeletedAt  gorm.DeletedAt `json:"deletedAt"`
 }
 
 type UserDataToken struct {

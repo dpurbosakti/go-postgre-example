@@ -20,17 +20,17 @@ func createRequestToModel(data dto.UserCreateRequest) domain.User {
 
 func modelToResponse(data domain.User) dto.UserResponse {
 	return dto.UserResponse{
-		Id:        data.Id,
-		Name:      data.Name,
-		Nik:       data.Nik,
-		Email:     data.Email,
-		Phone:     data.Phone,
-		Address:   data.Address,
-		Role:      data.Role,
-		Status:    data.Status,
-		CreatedAt: data.CreatedAt,
-		UpdatedAt: data.UpdatedAt,
-		DeletedAt: data.DeletedAt,
+		Id:         data.Id,
+		Name:       data.Name,
+		Nik:        data.Nik,
+		Email:      data.Email,
+		Phone:      data.Phone,
+		Address:    data.Address,
+		Role:       data.Role,
+		IsVerified: data.IsVerified,
+		CreatedAt:  data.CreatedAt,
+		UpdatedAt:  data.UpdatedAt,
+		DeletedAt:  data.DeletedAt,
 	}
 }
 

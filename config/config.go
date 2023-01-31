@@ -11,9 +11,17 @@ type HttpConf struct {
 	Port int
 }
 
+type EmailConf struct {
+	Email    string
+	Password string
+	Host     string
+	Port     int
+}
+
 type Config struct {
-	DbConf   DbConf
-	HttpConf HttpConf
+	DbConf    DbConf
+	HttpConf  HttpConf
+	EmailConf EmailConf
 }
 
 func GetConfig() (c *Config) {
@@ -43,6 +51,6 @@ func GetConfig() (c *Config) {
 	}
 
 	// done
-	fmt.Println("Config is loaded successfully")
+	// fmt.Println("Config is loaded successfully")
 	return c
 }
