@@ -1,8 +1,10 @@
 package service
 
 import (
+	"crypto/rand"
 	"learn-echo/features/users/model/domain"
 	"learn-echo/features/users/model/dto"
+	"math/big"
 )
 
 func createRequestToModel(data dto.UserCreateRequest) domain.User {
@@ -42,11 +44,19 @@ func responseToToken(data dto.UserResponse, token string) dto.UserDataToken {
 	}
 }
 
-// func updateRequestToModel(data dto.UserUpdateRequest) domain.User {
-// 	return domain.User{
-// 		Name:     *data.Name,
-// 		Password: *data.Password,
-// 		Phone:    *data.Phone,
-// 		Address:  *data.Address,
-// 	}
-// }
+func generateVerCode(length int) (string, error) {
+	seed := "012345679"
+	byteSlice := make([]byte, length)
+
+	for i := 0; i < length; i++ {
+		max := big.NewInt(int64(len(seed)))
+		num, err := rand.Int(rand.Reader, max)
+		if err != nil {
+			return "", err
+		}
+
+		byteSlice[i] = seed[num.Int64()]
+	}
+
+	return string(byteSlice), nil
+}

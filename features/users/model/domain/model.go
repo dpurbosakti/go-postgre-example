@@ -16,6 +16,7 @@ type User struct {
 	Phone     string           `json:"phone" gorm:"unique"`
 	Address   string           `json:"address" gorm:"type:varchar(100)"`
 	Role      string           `json:"role" gorm:"type:varchar(100)"`
+	VerCode   string           `json:"verCode"` //verification code
 	Status    types.UserStatus `json:"userStatus"`
 	CreatedAt time.Time        `json:"createdAt"`
 	UpdatedAt time.Time        `json:"updatedAt"`
