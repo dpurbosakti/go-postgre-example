@@ -4,7 +4,6 @@ import (
 	"errors"
 	"learn-echo/features/users/model/domain"
 	"learn-echo/features/users/model/dto"
-	"learn-echo/features/users/model/types"
 	"learn-echo/features/users/repository"
 	"learn-echo/middlewares"
 	eh "learn-echo/pkg/emailhelper"
@@ -31,7 +30,7 @@ func NewUserService(userRepository repository.UserRepository, db *gorm.DB) UserS
 }
 
 func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.UserResponse, err error) {
-	var errChan = make(chan error)
+	// var errChan = make(chan error)
 	hashPassword, errHash := ph.HashPassword(input.Password)
 	if errHash != nil {
 		return result, errHash
@@ -39,7 +38,7 @@ func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.
 	input.Password = hashPassword
 	data := createRequestToModel(input)
 	verCode, _ := generateVerCode(6)
-	data.Status = types.UserStatusUnverfied
+	data.IsVerified = false
 	data.VerCode = verCode
 	err = service.DB.Transaction(func(tx *gorm.DB) error {
 		resultRepo, err := service.UserRepository.Create(tx, data)
@@ -52,8 +51,8 @@ func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.
 	if err != nil {
 		return dto.UserResponse{}, err
 	}
-	go eh.SendMailSimple("Verification Code", fmt.Sprintf("here is your verification code %s", verCode), []string{data.Email}, errChan)
-	if err := <-errChan; err != nil {
+	err = eh.SendEmail(data)
+	if err != nil {
 		return dto.UserResponse{}, errors.New("failed to send email verification code: " + err.Error())
 	}
 	return result, nil

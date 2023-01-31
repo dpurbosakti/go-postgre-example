@@ -47,7 +47,7 @@ func (controller *UserControllerImpl) Create(c echo.Context) error {
 
 	result, err := controller.UserService.Create(userRequest)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "your email or handphone number is already registered")
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	return c.JSON(http.StatusCreated, ch.ResponseOkWithData("create data user success", result))
