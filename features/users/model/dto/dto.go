@@ -53,3 +53,7 @@ type UserVerifyRequest struct {
 	Email   string `json:"email" validate:"required,email"`
 	VerCode string `json:"verCode" validate:"required"`
 }
+
+type UserVerCodeRequest struct {
+	Email string `json:"email" validate:"required,email"`
+}

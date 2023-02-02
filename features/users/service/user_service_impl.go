@@ -156,12 +156,10 @@ func (service *UserServiceImpl) Update(input dto.UserUpdateRequest, userId int) 
 		if err != nil {
 			return err
 		}
-		fmt.Println(resultGet.Id)
 		err = copier.Copy(&resultGet, &input)
 		if err != nil {
 			return err
 		}
-		fmt.Println(resultGet.Id)
 		resultUpdate, err := service.UserRepository.Update(tx, resultGet)
 		if err != nil {
 			return err
@@ -178,7 +176,7 @@ func (service *UserServiceImpl) Update(input dto.UserUpdateRequest, userId int) 
 
 func (service *UserServiceImpl) Verify(input dto.UserVerifyRequest) (err error) {
 	err = service.DB.Transaction(func(tx *gorm.DB) error {
-		result, err := service.UserRepository.CheckEmail(tx, input)
+		result, err := service.UserRepository.CheckEmail(tx, input.Email)
 		if err != nil {
 			return err
 		}
@@ -187,7 +185,7 @@ func (service *UserServiceImpl) Verify(input dto.UserVerifyRequest) (err error) 
 		}
 
 		result.IsVerified = true
-		errSave := service.UserRepository.Save(tx, result)
+		_, errSave := service.UserRepository.Update(tx, result)
 		if errSave != nil {
 			return errSave
 		}
@@ -199,5 +197,35 @@ func (service *UserServiceImpl) Verify(input dto.UserVerifyRequest) (err error) 
 		return err
 	}
 
+	return nil
+}
+
+func (service *UserServiceImpl) RefreshVerCode(input dto.UserVerCodeRequest) (err error) {
+	var dataUser domain.User
+	err = service.DB.Transaction(func(tx *gorm.DB) error {
+		resultRepo, err := service.UserRepository.CheckEmail(tx, input.Email)
+		if err != nil {
+			return err
+		}
+		if resultRepo.IsVerified {
+			return errors.New("account is verified no need to refresh/change verification code")
+		}
+		verCode, _ := generateVerCode(6)
+		resultRepo.VerCode = verCode
+		_, err = service.UserRepository.Update(tx, resultRepo)
+		if err != nil {
+			return err
+		}
+		dataUser = resultRepo
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+
+	err = eh.SendEmail(dataUser)
+	if err != nil {
+		return errors.New("failed to send email verification code: " + err.Error())
+	}
 	return nil
 }

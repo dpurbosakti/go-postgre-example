@@ -11,3 +11,9 @@ dbConf:
   maxIdleConns: 5
   maxIdleTime: 100
   dialect: postgres
+
+emailConf:
+  email: example@gmail.com
+  password: example
+  host: example.gmail.com
+  port: 888

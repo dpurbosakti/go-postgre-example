@@ -10,4 +10,5 @@ type UserController interface {
 	Delete(c echo.Context) error
 	Update(c echo.Context) error
 	Verify(c echo.Context) error
+	RefreshVerCode(c echo.Context) error
 }

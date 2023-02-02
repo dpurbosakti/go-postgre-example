@@ -68,7 +68,6 @@ func (repository UserRepositoryImpl) Delete(tx *gorm.DB, userId int) error {
 }
 
 func (repository UserRepositoryImpl) Update(tx *gorm.DB, input domain.User) (domain.User, error) {
-	fmt.Println("input: ", input.Id)
 	result := tx.Save(&input)
 	if result.Error != nil {
 		return domain.User{}, errors.New("gagal memperbarui dan menyimpan data user")
@@ -101,20 +100,11 @@ func (repository UserRepositoryImpl) CheckDuplicate(tx *gorm.DB, input domain.Us
 	return nil
 }
 
-func (repository UserRepositoryImpl) CheckEmail(tx *gorm.DB, input dto.UserVerifyRequest) (domain.User, error) {
+func (repository UserRepositoryImpl) CheckEmail(tx *gorm.DB, email string) (domain.User, error) {
 	var user domain.User
-	result := tx.Where("email = ?", input.Email).First(&user)
+	result := tx.Where("email = ?", email).First(&user)
 	if result.Error != nil {
 		return domain.User{}, errors.New("error checking email")
 	}
 	return user, nil
-}
-
-func (repository UserRepositoryImpl) Save(tx *gorm.DB, input domain.User) error {
-	result := tx.Save(input)
-	if result.Error != nil {
-		return errors.New("failed to save data")
-	}
-
-	return nil
 }
