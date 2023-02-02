@@ -42,7 +42,7 @@ func (controller *UserControllerImpl) Create(c echo.Context) error {
 
 	errVal := c.Validate(userRequest)
 	if errVal != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, errVal)
+		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
 	result, err := controller.UserService.Create(userRequest)
@@ -63,7 +63,7 @@ func (controller *UserControllerImpl) Login(c echo.Context) error {
 
 	errVal := c.Validate(userRequest)
 	if errVal != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, errVal)
+		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
 	result, err := controller.UserService.Login(userRequest)
@@ -155,7 +155,7 @@ func (controller *UserControllerImpl) Verify(c echo.Context) error {
 
 	errVal := c.Validate(userRequest)
 	if errVal != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, errVal)
+		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
 	err := controller.UserService.Verify(userRequest)
@@ -164,4 +164,24 @@ func (controller *UserControllerImpl) Verify(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, ch.ResponseOkNoData("account is verified"))
+}
+
+func (controller *UserControllerImpl) RefreshVerCode(c echo.Context) error {
+	var userRequest dto.UserVerCodeRequest
+	errBind := c.Bind(&userRequest)
+	if errBind != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
+	}
+
+	errVal := c.Validate(userRequest)
+	if errVal != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
+	}
+
+	err := controller.UserService.RefreshVerCode(userRequest)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, ch.ResponseOkNoData("new email verification code sent"))
 }

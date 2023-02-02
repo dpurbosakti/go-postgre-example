@@ -13,4 +13,5 @@ type UserService interface {
 	Delete(userId int) (err error)
 	Update(input dto.UserUpdateRequest, userId int) (result dto.UserResponse, err error)
 	Verify(input dto.UserVerifyRequest) (err error)
+	RefreshVerCode(input dto.UserVerCodeRequest) (err error)
 }
