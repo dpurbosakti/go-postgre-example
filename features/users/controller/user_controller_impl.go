@@ -183,5 +183,5 @@ func (controller *UserControllerImpl) RefreshVerCode(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, ch.ResponseOkNoData("new email verification code sent"))
+	return c.JSON(http.StatusOK, ch.ResponseOkNoData("new verification code has been sent to your registered email"))
 }

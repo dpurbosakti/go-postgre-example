@@ -32,7 +32,7 @@ func (repository *UserRepositoryImpl) Login(tx *gorm.DB, input dto.UserLoginRequ
 	var user domain.User
 	result := tx.Where("email = ?", input.Email).First(&user)
 	if result.Error != nil {
-		return domain.User{}, fmt.Errorf("data user dengan email %s tidak ditemukan", input.Email)
+		return domain.User{}, fmt.Errorf("email %s not found", input.Email)
 	}
 
 	return user, nil
@@ -42,7 +42,7 @@ func (repository *UserRepositoryImpl) GetDetail(tx *gorm.DB, userId int) (domain
 	var user *domain.User
 	result := tx.First(&user, userId)
 	if result.Error != nil {
-		return domain.User{}, fmt.Errorf("data user dengan user id %d tidak ditemukan", userId)
+		return domain.User{}, fmt.Errorf("user id %d not found", userId)
 	}
 
 	return *user, nil
@@ -61,7 +61,7 @@ func (repository UserRepositoryImpl) Delete(tx *gorm.DB, userId int) error {
 	var user domain.User
 	result := tx.Delete(&user, userId)
 	if result.Error != nil {
-		return fmt.Errorf("data user dengan user id %d tidak ditemukan", userId)
+		return fmt.Errorf("user id %d not found", userId)
 	}
 
 	return nil
@@ -70,7 +70,7 @@ func (repository UserRepositoryImpl) Delete(tx *gorm.DB, userId int) error {
 func (repository UserRepositoryImpl) Update(tx *gorm.DB, input domain.User) (domain.User, error) {
 	result := tx.Save(&input)
 	if result.Error != nil {
-		return domain.User{}, errors.New("gagal memperbarui dan menyimpan data user")
+		return domain.User{}, errors.New("error updating your data")
 	}
 
 	return input, nil
