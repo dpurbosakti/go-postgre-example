@@ -16,8 +16,8 @@ import (
 )
 
 func main() {
-	cfg := config.GetConfig()
-	db := config.InitDb(cfg)
+	config.GetConfig()
+	db := config.InitDb(config.Cfg)
 	migration.InitMigrate(db)
 
 	presenter := factory.InitFactory(db)
@@ -41,5 +41,5 @@ func main() {
 		}
 	}()
 
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", cfg.HttpConf.Port)))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", config.Cfg.HttpConf.Port)))
 }

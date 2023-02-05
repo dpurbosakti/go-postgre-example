@@ -24,7 +24,9 @@ type Config struct {
 	EmailConf EmailConf
 }
 
-func GetConfig() (c *Config) {
+var Cfg *Config
+
+func GetConfig() {
 	// main viper config
 	viper.SetConfigName("config")
 	viper.SetConfigType("yml")
@@ -44,13 +46,13 @@ func GetConfig() (c *Config) {
 	}
 
 	// map to app
-	if err := viper.Unmarshal(&c); err != nil {
+	if err := viper.Unmarshal(&Cfg); err != nil {
 		fmt.Printf("Unable to decode into struct, %v", err)
 		panic(err)
 
 	}
 
 	// done
-	// fmt.Println("Config is loaded successfully")
-	return c
+	fmt.Println("Config is loaded successfully")
+
 }

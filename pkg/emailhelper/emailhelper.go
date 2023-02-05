@@ -11,7 +11,7 @@ import (
 )
 
 func SendEmail(user domain.User) error {
-	config := config.GetConfig()
+	config := config.Cfg
 	var body bytes.Buffer
 	t, err := template.ParseFiles("../pkg/emailhelper/body.html")
 	if err != nil {

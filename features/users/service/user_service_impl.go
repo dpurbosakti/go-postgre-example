@@ -9,6 +9,7 @@ import (
 	eh "learn-echo/pkg/emailhelper"
 	"learn-echo/pkg/pagination"
 	ph "learn-echo/pkg/passwordhelper"
+	"strings"
 
 	"github.com/jinzhu/copier"
 
@@ -112,6 +113,10 @@ func (service *UserServiceImpl) GetDetail(userId int) (result dto.UserResponse, 
 }
 
 func (service *UserServiceImpl) GetList(page pagination.Pagination) (result pagination.Pagination, err error) {
+	if page.Sort != "" {
+		tmp := strings.Replace(page.Sort, "_", " ", 1)
+		page.Sort = tmp
+	}
 	err = service.DB.Transaction(func(tx *gorm.DB) error {
 		resultRepo, err := service.UserRepository.GetList(tx, page)
 		if err != nil {
