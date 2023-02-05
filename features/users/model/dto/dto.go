@@ -9,17 +9,17 @@ import (
 type UserCreateRequest struct {
 	Name     string `json:"name" mod:"trim" validate:"required"`
 	Nik      string `json:"nik" validate:"nik"`
-	Email    string `json:"email" validate:"required,email"`
+	Email    string `json:"email" mod:"trim" validate:"required,email"`
 	Password string `json:"password" mod:"trim" validate:"required"`
 	Phone    string `json:"phone" validate:"phone,required"`
-	Address  string `json:"address" validate:"required"`
+	Address  string `json:"address" mod:"trim" validate:"required"`
 }
 
 type UserUpdateRequest struct {
-	Name     *string `json:"name"`
+	Name     *string `json:"name" mod:"trim"`
 	Password *string `json:"password" mod:"trim"`
 	Phone    *string `json:"phone" validate:"phone"`
-	Address  *string `json:"address"`
+	Address  *string `json:"address" mod:"trim"`
 }
 
 type UserResponse struct {
@@ -30,7 +30,7 @@ type UserResponse struct {
 	Phone      string         `json:"phone"`
 	Address    string         `json:"address"`
 	Role       string         `json:"role"`
-	IsVerified bool           `json:"status"`
+	IsVerified bool           `json:"isVerified"`
 	CreatedAt  time.Time      `json:"createdAt"`
 	UpdatedAt  time.Time      `json:"updatedAt"`
 	DeletedAt  gorm.DeletedAt `json:"deletedAt"`
@@ -45,15 +45,15 @@ type UserDataToken struct {
 }
 
 type UserLoginRequest struct {
-	Email    string `json:"email" validate:"required,email"`
+	Email    string `json:"email" mod:"trim" validate:"required,email"`
 	Password string `json:"password" validate:"required"`
 }
 
 type UserVerifyRequest struct {
-	Email   string `json:"email" validate:"required,email"`
-	VerCode string `json:"verCode" validate:"required"`
+	Email   string `json:"email" mod:"trim" validate:"required,email"`
+	VerCode string `json:"verCode" mod:"trim" validate:"required"`
 }
 
 type UserVerCodeRequest struct {
-	Email string `json:"email" validate:"required,email"`
+	Email string `json:"email" mod:"trim" validate:"required,email"`
 }
