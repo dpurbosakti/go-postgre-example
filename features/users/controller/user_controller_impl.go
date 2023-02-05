@@ -55,10 +55,16 @@ func (controller *UserControllerImpl) Create(c echo.Context) error {
 
 func (controller *UserControllerImpl) Login(c echo.Context) error {
 	var userRequest dto.UserLoginRequest
+	conform := modifiers.New()
 
 	errBind := c.Bind(&userRequest)
 	if errBind != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
+	}
+
+	err := conform.Struct(context.Background(), &userRequest)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	errVal := c.Validate(userRequest)
@@ -147,10 +153,16 @@ func (controller *UserControllerImpl) Update(c echo.Context) error {
 
 func (controller *UserControllerImpl) Verify(c echo.Context) error {
 	var userRequest dto.UserVerifyRequest
+	conform := modifiers.New()
 
 	errBind := c.Bind(&userRequest)
 	if errBind != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
+	}
+
+	err := conform.Struct(context.Background(), &userRequest)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	errVal := c.Validate(userRequest)
@@ -158,7 +170,7 @@ func (controller *UserControllerImpl) Verify(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
-	err := controller.UserService.Verify(userRequest)
+	err = controller.UserService.Verify(userRequest)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -168,9 +180,16 @@ func (controller *UserControllerImpl) Verify(c echo.Context) error {
 
 func (controller *UserControllerImpl) RefreshVerCode(c echo.Context) error {
 	var userRequest dto.UserVerCodeRequest
+	conform := modifiers.New()
+
 	errBind := c.Bind(&userRequest)
 	if errBind != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
+	}
+
+	err := conform.Struct(context.Background(), &userRequest)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	errVal := c.Validate(userRequest)
@@ -178,7 +197,7 @@ func (controller *UserControllerImpl) RefreshVerCode(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
-	err := controller.UserService.RefreshVerCode(userRequest)
+	err = controller.UserService.RefreshVerCode(userRequest)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
