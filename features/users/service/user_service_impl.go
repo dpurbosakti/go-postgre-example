@@ -56,7 +56,7 @@ func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.
 	if err != nil {
 		return dto.UserResponse{}, err
 	}
-	err = eh.SendEmail(data)
+	err = eh.SendEmailVerCode(data)
 	if err != nil {
 		return dto.UserResponse{}, errors.New("failed to send email verification code: " + err.Error())
 	}
@@ -228,7 +228,7 @@ func (service *UserServiceImpl) RefreshVerCode(input dto.UserVerCodeRequest) (er
 		return err
 	}
 
-	err = eh.SendEmail(dataUser)
+	err = eh.SendEmailVerCode(dataUser)
 	if err != nil {
 		return errors.New("failed to send email verification code: " + err.Error())
 	}
