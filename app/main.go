@@ -51,11 +51,11 @@ func main() {
 		m := gomail.NewMessage()
 		m.SetHeader("From", config.EmailConf.Email)
 		m.SetHeader("Subject", "Information")
+		t.Execute(&body, users)
+		m.SetBody("text/html", body.String())
 
 		for _, v := range users {
-			t.Execute(&body, v)
 			m.SetHeader("To", v.Email)
-			m.SetBody("text/html", body.String())
 			d := gomail.NewDialer(config.EmailConf.Host, config.EmailConf.Port, config.EmailConf.Email, config.EmailConf.Password)
 			err = d.DialAndSend(m)
 			if err != nil {
