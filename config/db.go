@@ -1,6 +1,9 @@
 package config
 
 import (
+	"os"
+
+	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
@@ -62,4 +65,19 @@ func InitDb(c *Config) (DB *gorm.DB) {
 	}
 
 	return DB
+}
+
+func InitDBTest() *gorm.DB {
+
+	errENV := godotenv.Load("dbtest.env")
+	if errENV != nil {
+		log.Fatalf("error loading env file")
+	}
+
+	db, e := gorm.Open(mysql.Open(os.Getenv("DSN")), &gorm.Config{})
+	if e != nil {
+		panic(e)
+	}
+
+	return db
 }
