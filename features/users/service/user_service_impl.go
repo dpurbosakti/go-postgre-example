@@ -51,15 +51,17 @@ func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.
 			return err
 		}
 		result = modelToResponse(resultRepo)
+
+		err = eh.SendEmailVerCode(data)
+		if err != nil {
+			return errors.New("failed to send email verification code: " + err.Error())
+		}
 		return nil
 	})
 	if err != nil {
 		return dto.UserResponse{}, err
 	}
-	err = eh.SendEmailVerCode(data)
-	if err != nil {
-		return dto.UserResponse{}, errors.New("failed to send email verification code: " + err.Error())
-	}
+
 	return result, nil
 }
 
@@ -83,7 +85,7 @@ func (service *UserServiceImpl) Login(input dto.UserLoginRequest) (result dto.Us
 	}
 	errCrypt := ph.ComparePassword(resultData.Password, input.Password)
 	if errCrypt != nil {
-		return result, errors.New("password incorrect")
+		return result, errors.New("password incorrect: " + errCrypt.Error())
 	}
 
 	dataToken := modelToResponse(resultData)
