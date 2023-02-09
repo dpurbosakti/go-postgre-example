@@ -1,9 +1,6 @@
 package config
 
 import (
-	"os"
-
-	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
@@ -16,6 +13,7 @@ type DbConf struct {
 	MaxIdleConns int
 	MaxIdleTime  string
 	Dialect      string
+	DsnTest      string
 }
 
 func InitDb(c *Config) (DB *gorm.DB) {
@@ -69,12 +67,13 @@ func InitDb(c *Config) (DB *gorm.DB) {
 
 func InitDBTest() *gorm.DB {
 
-	errENV := godotenv.Load("dbtest.env")
-	if errENV != nil {
-		log.Fatalf("error loading env file")
-	}
+	// errENV := godotenv.Load("dbtest.env")
+	// if errENV != nil {
+	// 	log.Fatalf("error loading env file: %s", errENV.Error())
+	// }
 
-	db, e := gorm.Open(mysql.Open(os.Getenv("DSN")), &gorm.Config{})
+	// dsn := os.Getenv("DSN")
+	db, e := gorm.Open(mysql.Open("root:1amnohero@tcp(localhost:3306)/learnechotest?parseTime=true"), &gorm.Config{})
 	if e != nil {
 		panic(e)
 	}

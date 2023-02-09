@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"learn-echo/config"
 	"learn-echo/features/users/model/domain"
 	"learn-echo/features/users/model/dto"
@@ -57,26 +58,88 @@ import (
 func TestLogin(t *testing.T) {
 	repo := new(mocks.UserRepository)
 	db := config.InitDBTest()
-	input := dto.UserLoginRequest{
+
+	inputSuccess := dto.UserLoginRequest{
 		Email:    "example@gmail.com",
 		Password: "CobaCoba",
 	}
 
-	response := domain.User{
+	responseSuccess := domain.User{
 		Id: 1, Nik: "", Name: "", Email: "example@gmail.com", Password: "$2a$10$5eZ8T4/BO7JeLrOrIaigSuuyLS62fouMkQZzOtu1YWpMqpI4CEuBy", Phone: "085605430555", Address: "", Role: "user", VerCode: "", IsVerified: true, CreatedAt: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), UpdatedAt: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), DeletedAt: gorm.DeletedAt{Time: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), Valid: false},
 	}
 
-	result := dto.UserDataToken{
+	resultSuccess := dto.UserDataToken{
 		Id: 1, Role: "user", Phone: "085605430555", Email: "example@gmail.com", Token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6ImR3aWF0bW9rb3BAZ21haWwuY29tIiwiZXhwIjoxNjc3NjM3OTM5LCJwaG9uZSI6IjA4NTYwNTQzMDU1NSIsInJvbGUiOiJ1c2VyIiwidXNlcklkIjoxfQ.rTJuTTQIy-QbQ1q2EKrjn9nF3ppF4L4VJa0jJafAIpI",
 	}
+
+	inputFailed := dto.UserLoginRequest{
+		Email:    "example@gmail.com",
+		Password: "test",
+	}
+
+	responseFailed := domain.User{}
+
+	resultFailed := dto.UserDataToken{}
+	errorLogin := errors.New("password incorrect")
 	t.Run("Login Success", func(t *testing.T) {
-		repo.On("Login", mock.Anything, mock.Anything).Return(response, nil).Once()
+		repo.On("Login", mock.Anything, mock.Anything).Return(responseSuccess, nil).Once()
 		srv := NewUserService(repo, db)
 
-		res, err := srv.Login(input)
+		res, err := srv.Login(inputSuccess)
 		res.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6ImR3aWF0bW9rb3BAZ21haWwuY29tIiwiZXhwIjoxNjc3NjM3OTM5LCJwaG9uZSI6IjA4NTYwNTQzMDU1NSIsInJvbGUiOiJ1c2VyIiwidXNlcklkIjoxfQ.rTJuTTQIy-QbQ1q2EKrjn9nF3ppF4L4VJa0jJafAIpI"
 		assert.NoError(t, err)
-		assert.Equal(t, result, res)
+		assert.Equal(t, resultSuccess, res)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Login Failed", func(t *testing.T) {
+		repo.On("Login", mock.Anything, mock.Anything).Return(responseFailed, errorLogin).Once()
+		srv := NewUserService(repo, db)
+
+		res, err := srv.Login(inputFailed)
+		assert.EqualError(t, err, errorLogin.Error())
+		assert.Equal(t, resultFailed, res)
+		repo.AssertExpectations(t)
+	})
+
+}
+
+func TestGetDetail(t *testing.T) {
+	repo := new(mocks.UserRepository)
+	db := config.InitDBTest()
+
+	responseSuccess := domain.User{
+		Id: 1, Nik: "1234567890987654", Name: "dwi", Email: "example@gmail.com", Password: "$2a$10$5eZ8T4/BO7JeLrOrIaigSuuyLS62fouMkQZzOtu1YWpMqpI4CEuBy", Phone: "085605430555", Address: "rombo", Role: "user", VerCode: "", IsVerified: true, CreatedAt: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), UpdatedAt: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), DeletedAt: gorm.DeletedAt{Time: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), Valid: false},
+	}
+
+	resultSuccess := dto.UserResponse{
+		Id: 1, Nik: "1234567890987654", Name: "dwi", Email: "example@gmail.com", Address: "rombo", Role: "user",
+		Phone: "085605430555", IsVerified: true, CreatedAt: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), UpdatedAt: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), DeletedAt: gorm.DeletedAt{Time: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), Valid: false},
+	}
+
+	responseFailed := domain.User{}
+
+	resultFailed := dto.UserResponse{}
+
+	errorGetDetail := errors.New("user id 1 not found")
+
+	t.Run("Get Detail Success", func(t *testing.T) {
+		repo.On("GetDetail", mock.Anything, mock.Anything).Return(responseSuccess, nil).Once()
+		srv := NewUserService(repo, db)
+
+		res, err := srv.GetDetail(1)
+		assert.NoError(t, err)
+		assert.Equal(t, resultSuccess, res)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Get Detail Failed", func(t *testing.T) {
+		repo.On("GetDetail", mock.Anything, mock.Anything).Return(responseFailed, errorGetDetail).Once()
+		srv := NewUserService(repo, db)
+
+		res, err := srv.GetDetail(1)
+		assert.EqualError(t, err, errorGetDetail.Error())
+		assert.Equal(t, resultFailed, res)
 		repo.AssertExpectations(t)
 	})
 
