@@ -6,6 +6,7 @@ import (
 	"learn-echo/features/users/model/domain"
 	"learn-echo/features/users/model/dto"
 	"learn-echo/mocks"
+	"learn-echo/pkg/pagination"
 	"testing"
 	"time"
 
@@ -143,4 +144,96 @@ func TestGetDetail(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 
+}
+
+func TestGetList(t *testing.T) {
+	repo := new(mocks.UserRepository)
+	db := config.InitDBTest()
+	input := pagination.Pagination{
+		Limit:      1,
+		Page:       1,
+		Sort:       "id asc",
+		TotalRows:  1,
+		TotalPages: 1,
+		Rows: []domain.User{
+			{
+				Id:   1,
+				Name: "dwi",
+			},
+		},
+	}
+
+	// responseSuccess := domain.User{
+	// 	Id:   1,
+	// 	Name: "dwi",
+	// }
+
+	resultSuccess := pagination.Pagination{
+		Limit:      1,
+		Page:       1,
+		Sort:       "id asc",
+		TotalRows:  1,
+		TotalPages: 1,
+		Rows: []domain.User{
+			{
+				Id:   1,
+				Name: "dwi",
+			},
+		},
+	}
+
+	// get list success but empty
+	resultEmpty := pagination.Pagination{
+		Limit:      1,
+		Page:       1,
+		Sort:       "id asc",
+		TotalRows:  1,
+		TotalPages: 1,
+		Rows:       []domain.User{},
+	}
+
+	t.Run("Get List Success", func(t *testing.T) {
+		repo.On("GetList", mock.Anything, mock.Anything).Return(resultSuccess, nil).Once()
+		srv := NewUserService(repo, db)
+
+		res, err := srv.GetList(input)
+		assert.NoError(t, err)
+		assert.Equal(t, resultSuccess, res)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Get List Success But Empty", func(t *testing.T) {
+		repo.On("GetList", mock.Anything, mock.Anything).Return(resultEmpty, nil).Once()
+		srv := NewUserService(repo, db)
+
+		res, err := srv.GetList(input)
+		assert.NoError(t, err)
+		assert.Equal(t, resultEmpty, res)
+		repo.AssertExpectations(t)
+	})
+}
+
+func TestDelete(t *testing.T) {
+	repo := new(mocks.UserRepository)
+	db := config.InitDBTest()
+
+	errFailed := errors.New("user id 1 not found")
+
+	t.Run("Delete Success", func(t *testing.T) {
+		repo.On("Delete", mock.Anything, mock.Anything).Return(nil).Once()
+		srv := NewUserService(repo, db)
+
+		err := srv.Delete(1)
+		assert.NoError(t, err)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Delete Failed", func(t *testing.T) {
+		repo.On("Delete", mock.Anything, mock.Anything).Return(errFailed).Once()
+		srv := NewUserService(repo, db)
+
+		err := srv.Delete(1)
+		assert.EqualError(t, err, errFailed.Error())
+		repo.AssertExpectations(t)
+	})
 }
