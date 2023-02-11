@@ -237,3 +237,7 @@ func TestDelete(t *testing.T) {
 		repo.AssertExpectations(t)
 	})
 }
+
+func TestVerify(t *testing.T) {
+
+}
