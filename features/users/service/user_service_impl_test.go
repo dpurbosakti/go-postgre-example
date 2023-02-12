@@ -239,5 +239,41 @@ func TestDelete(t *testing.T) {
 }
 
 func TestVerify(t *testing.T) {
+	repo := new(mocks.UserRepository)
+	db := config.InitDBTest()
 
+	responseSuccess := domain.User{
+		Id: 1, Nik: "1234567890987654", Name: "dwi", Email: "example@gmail.com", Password: "$2a$10$5eZ8T4/BO7JeLrOrIaigSuuyLS62fouMkQZzOtu1YWpMqpI4CEuBy", Phone: "085605430555", Address: "rombo", Role: "user", VerCode: "123456", IsVerified: true, CreatedAt: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), UpdatedAt: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), DeletedAt: gorm.DeletedAt{Time: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), Valid: false},
+	}
+
+	inputSuccess := dto.UserVerifyRequest{
+		Email:   "example@gmail.com",
+		VerCode: "123456",
+	}
+
+	inputError := dto.UserVerifyRequest{
+		Email:   "example@gmail.com",
+		VerCode: "123451",
+	}
+
+	errVerify := errors.New("the verification code you entered is incorrect")
+
+	t.Run("Verify Success", func(t *testing.T) {
+		repo.On("CheckEmail", mock.Anything, mock.Anything).Return(responseSuccess, nil).Once()
+		repo.On("Update", mock.Anything, mock.Anything).Return(responseSuccess, nil).Once()
+		srv := NewUserService(repo, db)
+
+		err := srv.Verify(inputSuccess)
+		assert.NoError(t, err)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Verify Failed", func(t *testing.T) {
+		repo.On("CheckEmail", mock.Anything, mock.Anything).Return(responseSuccess, nil).Once()
+		srv := NewUserService(repo, db)
+
+		err := srv.Verify(inputError)
+		assert.EqualError(t, err, errVerify.Error())
+		repo.AssertExpectations(t)
+	})
 }
