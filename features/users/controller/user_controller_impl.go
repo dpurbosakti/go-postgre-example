@@ -16,36 +16,34 @@ import (
 
 type UserControllerImpl struct {
 	UserService service.UserService
-	// Validate    *validator.Validate
 }
 
 func NewUserController(userService service.UserService) *UserControllerImpl {
 	return &UserControllerImpl{
 		UserService: userService,
-		// Validate:    validate,
 	}
 }
 
 func (controller *UserControllerImpl) Create(c echo.Context) error {
-	var userRequest dto.UserCreateRequest
+	var userReq dto.UserCreateRequest
 	conform := modifiers.New()
 
-	errBind := c.Bind(&userRequest)
+	errBind := c.Bind(&userReq)
 	if errBind != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
 	}
 
-	err := conform.Struct(context.Background(), &userRequest)
+	err := conform.Struct(context.Background(), &userReq)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	errVal := c.Validate(userRequest)
+	errVal := c.Validate(userReq)
 	if errVal != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
-	result, err := controller.UserService.Create(userRequest)
+	result, err := controller.UserService.Create(userReq)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -54,25 +52,25 @@ func (controller *UserControllerImpl) Create(c echo.Context) error {
 }
 
 func (controller *UserControllerImpl) Login(c echo.Context) error {
-	var userRequest dto.UserLoginRequest
+	var userReq dto.UserLoginRequest
 	conform := modifiers.New()
 
-	errBind := c.Bind(&userRequest)
+	errBind := c.Bind(&userReq)
 	if errBind != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
 	}
 
-	err := conform.Struct(context.Background(), &userRequest)
+	err := conform.Struct(context.Background(), &userReq)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	errVal := c.Validate(userRequest)
+	errVal := c.Validate(userReq)
 	if errVal != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
-	result, err := controller.UserService.Login(userRequest)
+	result, err := controller.UserService.Login(userReq)
 	if err != nil {
 		if err.Error() == "password incorrect" {
 			return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
@@ -128,22 +126,22 @@ func (controller *UserControllerImpl) Delete(c echo.Context) error {
 }
 
 func (controller *UserControllerImpl) Update(c echo.Context) error {
-	var userRequest dto.UserUpdateRequest
+	var userReq dto.UserUpdateRequest
 	conform := modifiers.New()
 
-	errBind := c.Bind(&userRequest)
+	errBind := c.Bind(&userReq)
 	if errBind != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
 	}
 
-	err := conform.Struct(context.Background(), &userRequest)
+	err := conform.Struct(context.Background(), &userReq)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	dataToken, _ := middlewares.ExtractToken(c)
 	userId := int(dataToken.Id)
-	result, err := controller.UserService.Update(userRequest, userId)
+	result, err := controller.UserService.Update(userReq, userId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, err)
 	}
@@ -152,25 +150,25 @@ func (controller *UserControllerImpl) Update(c echo.Context) error {
 }
 
 func (controller *UserControllerImpl) Verify(c echo.Context) error {
-	var userRequest dto.UserVerifyRequest
+	var userReq dto.UserVerifyRequest
 	conform := modifiers.New()
 
-	errBind := c.Bind(&userRequest)
+	errBind := c.Bind(&userReq)
 	if errBind != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
 	}
 
-	err := conform.Struct(context.Background(), &userRequest)
+	err := conform.Struct(context.Background(), &userReq)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	errVal := c.Validate(userRequest)
+	errVal := c.Validate(userReq)
 	if errVal != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
-	err = controller.UserService.Verify(userRequest)
+	err = controller.UserService.Verify(userReq)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -179,25 +177,25 @@ func (controller *UserControllerImpl) Verify(c echo.Context) error {
 }
 
 func (controller *UserControllerImpl) RefreshVerCode(c echo.Context) error {
-	var userRequest dto.UserVerCodeRequest
+	var userReq dto.UserVerCodeRequest
 	conform := modifiers.New()
 
-	errBind := c.Bind(&userRequest)
+	errBind := c.Bind(&userReq)
 	if errBind != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errBind.Error())
 	}
 
-	err := conform.Struct(context.Background(), &userRequest)
+	err := conform.Struct(context.Background(), &userReq)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	errVal := c.Validate(userRequest)
+	errVal := c.Validate(userReq)
 	if errVal != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
-	err = controller.UserService.RefreshVerCode(userRequest)
+	err = controller.UserService.RefreshVerCode(userReq)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}

@@ -1,23 +1,32 @@
 package factory
 
 import (
-	userController "learn-echo/features/users/controller"
-	userRepository "learn-echo/features/users/repository"
-	userService "learn-echo/features/users/service"
+	accountC "learn-echo/features/accounts/controller"
+	accountR "learn-echo/features/accounts/repository"
+	accountS "learn-echo/features/accounts/service"
+	userC "learn-echo/features/users/controller"
+	userR "learn-echo/features/users/repository"
+	userS "learn-echo/features/users/service"
 
 	"gorm.io/gorm"
 )
 
 type Presenter struct {
-	UserPresenter userController.UserController
+	UserPresenter    userC.UserController
+	AccountPresenter accountC.AccountController
 }
 
 func InitFactory(db *gorm.DB) Presenter {
-	UserRepository := userRepository.NewUserRepository()
-	UserService := userService.NewUserService(UserRepository, db)
-	UserController := userController.NewUserController(UserService)
+	UserRepository := userR.NewUserRepository()
+	UserService := userS.NewUserService(UserRepository, db)
+	UserController := userC.NewUserController(UserService)
+
+	AccountRepository := accountR.NewAccountRepository()
+	AccountService := accountS.NewAccountService(AccountRepository, db)
+	AccountController := accountC.NewAccountController(AccountService)
 
 	return Presenter{
-		UserPresenter: UserController,
+		UserPresenter:    UserController,
+		AccountPresenter: AccountController,
 	}
 }
