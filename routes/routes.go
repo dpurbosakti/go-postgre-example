@@ -33,5 +33,7 @@ func New(presenter factory.Presenter) *echo.Echo {
 	e.POST("/users/verify", presenter.UserPresenter.Verify)
 	e.POST("/users/refreshcode", presenter.UserPresenter.RefreshVerCode)
 
+	// accounts
+	e.POST("/accounts", presenter.AccountPresenter.Create, middlewares.IsAuthenticated())
 	return e
 }
