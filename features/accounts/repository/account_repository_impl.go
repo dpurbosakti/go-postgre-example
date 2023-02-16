@@ -24,3 +24,7 @@ func (repository AccountRepositoryImpl) Create(tx *gorm.DB, input domain.Account
 
 	return input, nil
 }
+
+func (repository AccountRepositoryImpl) GetDetail(tx *gorm.DB, userId uint) (domain.Account, error) {
+	return domain.Account{}, nil
+}
