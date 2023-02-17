@@ -26,5 +26,11 @@ func (repository AccountRepositoryImpl) Create(tx *gorm.DB, input domain.Account
 }
 
 func (repository AccountRepositoryImpl) GetDetail(tx *gorm.DB, userId uint) (domain.Account, error) {
-	return domain.Account{}, nil
+	var account *domain.Account
+	result := tx.Where("user_id = ?", userId).First(&account)
+	if result.Error != nil {
+		return domain.Account{}, fmt.Errorf("account with user id %d not found", userId)
+	}
+
+	return *account, nil
 }
