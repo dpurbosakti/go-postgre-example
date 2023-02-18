@@ -43,3 +43,15 @@ func (controller *AccountControllerImpl) Create(c echo.Context) error {
 	return c.JSON(http.StatusCreated, ch.ResponseOkWithData("create data account success", result))
 
 }
+
+func (controller *AccountControllerImpl) GetDetail(c echo.Context) error {
+	dataToken, _ := middlewares.ExtractToken(c)
+	userId := uint(dataToken.Id)
+
+	result, err := controller.AccountService.GetDetail(userId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusCreated, ch.ResponseOkWithData("get data account success", result))
+}
