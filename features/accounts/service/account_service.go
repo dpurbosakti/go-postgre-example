@@ -6,4 +6,5 @@ import (
 
 type AccountService interface {
 	Create(input dto.AccountCreateRequest, userId uint) (result dto.AccountResponse, err error)
+	GetDetail(userId uint) (result dto.AccountResponse, err error)
 }

@@ -43,3 +43,19 @@ func (service *AccountServiceImpl) Create(input dto.AccountCreateRequest, userId
 
 	return result, nil
 }
+
+func (service *AccountServiceImpl) GetDetail(userId uint) (result dto.AccountResponse, err error) {
+	err = service.DB.Transaction(func(tx *gorm.DB) error {
+		resultRepo, err := service.AccountRepository.GetDetail(tx, userId)
+		if err != nil {
+			return err
+		}
+		result = modelToResponse(resultRepo)
+		return nil
+	})
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
