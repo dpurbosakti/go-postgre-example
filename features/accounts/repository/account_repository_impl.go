@@ -3,8 +3,10 @@ package repository
 import (
 	"fmt"
 	"learn-echo/features/accounts/model/domain"
+	"learn-echo/pkg/pagination"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 const source = "account"
@@ -33,4 +35,13 @@ func (repository AccountRepositoryImpl) GetDetail(tx *gorm.DB, userId uint) (dom
 	}
 
 	return *account, nil
+}
+
+func (repository AccountRepositoryImpl) GetList(tx *gorm.DB, page pagination.Pagination) (pagination.Pagination, error) {
+	var accounts []domain.Account
+
+	tx.Preload(clause.Associations).Scopes(pagination.Paginate(accounts, &page, tx)).Find(&accounts)
+	page.Rows = accounts
+
+	return page, nil
 }
