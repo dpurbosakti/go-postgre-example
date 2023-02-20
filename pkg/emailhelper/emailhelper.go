@@ -16,7 +16,6 @@ import (
 func SendEmailVerCode(user domain.User) error {
 	var basePath string
 	wd, _ := os.Getwd()
-	fmt.Println("string: ", string(wd[:len(wd)-12]))
 	if string(wd[len(wd)-13]) == "u" {
 		basePath = filepath.Join(wd, "../../../", "pkg/emailhelper/body.html")
 	} else {

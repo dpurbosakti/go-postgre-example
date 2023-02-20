@@ -40,7 +40,9 @@ func (repository AccountRepositoryImpl) GetDetail(tx *gorm.DB, userId uint) (dom
 func (repository AccountRepositoryImpl) GetList(tx *gorm.DB, page pagination.Pagination) (pagination.Pagination, error) {
 	var accounts []domain.Account
 
-	tx.Preload(clause.Associations).Scopes(pagination.Paginate(accounts, &page, tx)).Find(&accounts)
+	tx.Preload(clause.Associations, func(tx *gorm.DB) *gorm.DB {
+		return tx.Omit("Password")
+	}).Scopes(pagination.Paginate(accounts, &page, tx)).Find(&accounts)
 	page.Rows = accounts
 
 	return page, nil

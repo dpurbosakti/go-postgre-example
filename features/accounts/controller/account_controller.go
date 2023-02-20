@@ -5,4 +5,5 @@ import "github.com/labstack/echo/v4"
 type AccountController interface {
 	Create(c echo.Context) error
 	GetDetail(c echo.Context) error
+	GetList(c echo.Context) error
 }
