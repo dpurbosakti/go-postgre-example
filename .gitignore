@@ -1,2 +1,3 @@
 app/config.yml
+database/seeders/config.yml
 config/dbtest.env
