@@ -5,7 +5,9 @@ import (
 	"learn-echo/features/accounts/service"
 	"learn-echo/middlewares"
 	ch "learn-echo/pkg/controllerhelper"
+	"learn-echo/pkg/pagination"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -54,4 +56,24 @@ func (controller *AccountControllerImpl) GetDetail(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, ch.ResponseOkWithData("get data account success", result))
+}
+
+func (controller *AccountControllerImpl) GetList(c echo.Context) error {
+	var page pagination.Pagination
+	limitInt, _ := strconv.Atoi(c.QueryParam("limit"))
+	pageInt, _ := strconv.Atoi(c.QueryParam("page"))
+	page.Limit = limitInt
+	page.Page = pageInt
+	page.Sort = c.QueryParam("sort")
+
+	result, err := controller.AccountService.GetList(page)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, err)
+	}
+
+	if result.TotalRows == 0 {
+		return echo.NewHTTPError(http.StatusNotFound, "data not found")
+	}
+
+	return c.JSON(http.StatusOK, ch.ResponseOkWithData("get data accounts success", result))
 }

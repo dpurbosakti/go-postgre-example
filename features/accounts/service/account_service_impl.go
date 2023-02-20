@@ -5,6 +5,8 @@ import (
 	"learn-echo/features/accounts/model/domain"
 	"learn-echo/features/accounts/model/dto"
 	"learn-echo/features/accounts/repository"
+	"learn-echo/pkg/pagination"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -51,6 +53,26 @@ func (service *AccountServiceImpl) GetDetail(userId uint) (result dto.AccountRes
 			return err
 		}
 		result = modelToResponse(resultRepo)
+		return nil
+	})
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+func (service *AccountServiceImpl) GetList(page pagination.Pagination) (result pagination.Pagination, err error) {
+	if page.Sort != "" {
+		tmp := strings.Replace(page.Sort, "_", " ", 1)
+		page.Sort = tmp
+	}
+	err = service.DB.Transaction(func(tx *gorm.DB) error {
+		resultRepo, err := service.AccountRepository.GetList(tx, page)
+		if err != nil {
+			return err
+		}
+		result = resultRepo
 		return nil
 	})
 	if err != nil {

@@ -36,5 +36,6 @@ func New(presenter factory.Presenter) *echo.Echo {
 	// accounts
 	e.POST("/accounts", presenter.AccountPresenter.Create, middlewares.IsAuthenticated())
 	e.GET("/accounts", presenter.AccountPresenter.GetDetail, middlewares.IsAuthenticated())
+	e.GET("/accounts-list", presenter.AccountPresenter.GetList)
 	return e
 }
