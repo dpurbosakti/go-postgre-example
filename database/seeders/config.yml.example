@@ -1,0 +1,19 @@
+name: Mokotest
+version: 0.0.1
+
+httpConf:
+  host: 127.0.0.1
+  port: 8080
+
+dbConf:
+  dsn: host=127.0.0.1 port=5432 user=postgres password=postgres dbname=test sslmode=disable TimeZone=Asia/Jakarta
+  maxOpenConns: 5
+  maxIdleConns: 5
+  maxIdleTime: 100
+  dialect: postgres
+
+emailConf:
+  email: example@gmail.com
+  password: example
+  host: example.gmail.com
+  port: 888
