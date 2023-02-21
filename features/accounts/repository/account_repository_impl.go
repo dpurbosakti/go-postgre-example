@@ -47,3 +47,7 @@ func (repository AccountRepositoryImpl) GetList(tx *gorm.DB, page pagination.Pag
 
 	return page, nil
 }
+
+func (repository AccountRepositoryImpl) Delete(tx *gorm.DB, userId uint) error {
+	return nil
+}
