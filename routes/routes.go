@@ -26,16 +26,16 @@ func New(presenter factory.Presenter) *echo.Echo {
 	//users
 	e.POST("/signup", presenter.UserPresenter.Create)
 	e.POST("/login", presenter.UserPresenter.Login)
-	e.GET("/user", presenter.UserPresenter.GetDetail, middlewares.IsAuthenticated())
+	e.GET("/users/detail", presenter.UserPresenter.GetDetail, middlewares.IsAuthenticated())
 	e.DELETE("/user", presenter.UserPresenter.Delete, middlewares.IsAuthenticated())
 	e.PUT("/user", presenter.UserPresenter.Update, middlewares.IsAuthenticated())
-	e.GET("/users", presenter.UserPresenter.GetList)
+	e.GET("/users/list", presenter.UserPresenter.GetList)
 	e.POST("/users/verify", presenter.UserPresenter.Verify)
 	e.POST("/users/refreshcode", presenter.UserPresenter.RefreshVerCode)
 
 	// accounts
 	e.POST("/accounts", presenter.AccountPresenter.Create, middlewares.IsAuthenticated())
-	e.GET("/accounts", presenter.AccountPresenter.GetDetail, middlewares.IsAuthenticated())
-	e.GET("/accounts-list", presenter.AccountPresenter.GetList)
+	e.GET("/accounts/detail", presenter.AccountPresenter.GetDetail, middlewares.IsAuthenticated())
+	e.GET("/accounts/list", presenter.AccountPresenter.GetList)
 	return e
 }
