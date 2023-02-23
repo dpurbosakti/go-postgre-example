@@ -16,10 +16,10 @@ type DbConf struct {
 	DsnTest      string
 }
 
-func InitDb(c *Config) (DB *gorm.DB) {
+func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
 
 	if c.DbConf.Dsn == "" {
-		log.WithFields(log.Fields{
+		logger.WithFields(log.Fields{
 			"type":    "db",
 			"source":  "gorm",
 			"status":  "unset",
@@ -28,7 +28,7 @@ func InitDb(c *Config) (DB *gorm.DB) {
 		return
 	}
 	if c.DbConf.Dialect != "mysql" && c.DbConf.Dialect != "postgres" {
-		log.WithFields(log.Fields{
+		logger.WithFields(log.Fields{
 			"type":    "db",
 			"source":  "gorm",
 			"status":  "unset",
@@ -46,16 +46,16 @@ func InitDb(c *Config) (DB *gorm.DB) {
 
 	db, err := gorm.Open(gormD, &gorm.Config{})
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(log.Fields{
 			"type":    "db",
 			"source":  "gorm",
 			"status":  "panic",
 			"message": "Failed to connect to database!",
 		}).Info("Instantiation")
-		log.Panic(err)
+		logger.Panic(err)
 	} else {
 		DB = db
-		log.WithFields(log.Fields{
+		logger.WithFields(log.Fields{
 			"type":   "db",
 			"source": "gorm",
 			"status": "done",
@@ -67,12 +67,6 @@ func InitDb(c *Config) (DB *gorm.DB) {
 
 func InitDBTest() *gorm.DB {
 
-	// errENV := godotenv.Load("dbtest.env")
-	// if errENV != nil {
-	// 	log.Fatalf("error loading env file: %s", errENV.Error())
-	// }
-
-	// dsn := os.Getenv("DSN")
 	db, e := gorm.Open(mysql.Open("root:1amnohero@tcp(localhost:3306)/learnechotest?parseTime=true"), &gorm.Config{})
 	if e != nil {
 		panic(e)
