@@ -23,7 +23,15 @@ import (
 
 func main() {
 	config.GetConfig()
-	db := config.InitDb(config.Cfg)
+
+	logger := log.New()
+	logger.Formatter = &log.TextFormatter{
+		ForceColors:     true,
+		TimestampFormat: "2006/01/02 - 15:04:05",
+		FullTimestamp:   true,
+	}
+
+	db := config.InitDb(config.Cfg, logger)
 	migration.InitMigrate(db)
 
 	presenter := factory.InitFactory(db)
@@ -72,7 +80,7 @@ func main() {
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		for sig := range c {
-			log.WithFields(log.Fields{
+			logger.WithFields(log.Fields{
 				"status": "closed",
 				"signal": sig,
 			}).Info("Program closed")
