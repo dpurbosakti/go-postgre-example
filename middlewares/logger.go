@@ -1,9 +1,6 @@
 package middlewares
 
 import (
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -17,7 +14,6 @@ func makeLogEntry(c echo.Context) *log.Entry {
 		TimestampFormat: "2006/01/02 - 15:04:05",
 		FullTimestamp:   true,
 	}
-
 
 	if c == nil {
 		return logger.WithFields(log.Fields{

@@ -49,5 +49,11 @@ func (repository AccountRepositoryImpl) GetList(tx *gorm.DB, page pagination.Pag
 }
 
 func (repository AccountRepositoryImpl) Delete(tx *gorm.DB, userId uint) error {
+	var account domain.Account
+	result := tx.Where("user_id = ?", userId).Delete(&account)
+	if result.Error != nil {
+		return fmt.Errorf("user id %d not found", userId)
+	}
+
 	return nil
 }
