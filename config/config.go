@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
@@ -19,9 +20,10 @@ type EmailConf struct {
 }
 
 type Config struct {
-	DbConf    DbConf
-	HttpConf  HttpConf
-	EmailConf EmailConf
+	DbConf     DbConf
+	HttpConf   HttpConf
+	EmailConf  EmailConf
+	LoggerConf *log.Logger
 }
 
 var Cfg *Config
@@ -52,7 +54,24 @@ func GetConfig() {
 
 	}
 
-	// done
-	fmt.Println("Config is loaded successfully")
+	// initialize logger
+	initLogger()
 
+	// done
+	Cfg.LoggerConf.WithFields(log.Fields{
+		"source":  "config",
+		"status":  "done",
+		"message": "config is loaded successfully",
+	}).Info("Loading Config")
+
+}
+
+func initLogger() {
+	logger := log.New()
+	logger.Formatter = &log.TextFormatter{
+		ForceColors:     true,
+		TimestampFormat: "2006/01/02 - 15:04:05",
+		FullTimestamp:   true,
+	}
+	Cfg.LoggerConf = logger
 }
