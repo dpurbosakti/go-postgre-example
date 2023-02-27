@@ -6,7 +6,6 @@ import (
 	"learn-echo/config"
 	"learn-echo/factory"
 	"learn-echo/features/users/model/domain"
-	"learn-echo/middlewares"
 	"learn-echo/migration"
 	"learn-echo/routes"
 	"os"
@@ -17,7 +16,6 @@ import (
 	"github.com/go-gomail/gomail"
 	"github.com/robfig/cron"
 
-	"github.com/labstack/echo/v4/middleware"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -36,10 +34,6 @@ func main() {
 
 	presenter := factory.InitFactory(db)
 	e := routes.New(presenter)
-
-	e.Use(middlewares.LogMiddleware)
-	e.Use(middlewares.CorsMiddleware())
-	e.Pre(middleware.RemoveTrailingSlash())
 
 	cron := cron.New()
 	cron.AddFunc("1 * * * *", func() {
