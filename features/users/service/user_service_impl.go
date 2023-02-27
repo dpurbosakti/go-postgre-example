@@ -9,14 +9,15 @@ import (
 	eh "learn-echo/pkg/emailhelper"
 	"learn-echo/pkg/pagination"
 	ph "learn-echo/pkg/passwordhelper"
+	sh "learn-echo/pkg/servicehelper"
 	"strings"
 
 	"github.com/jinzhu/copier"
 
-	"fmt"
-
 	"gorm.io/gorm"
 )
+
+const scope = "user"
 
 type UserServiceImpl struct {
 	UserRepository repository.UserRepository
@@ -59,6 +60,7 @@ func (service *UserServiceImpl) Create(input dto.UserCreateRequest) (result dto.
 		return nil
 	})
 	if err != nil {
+		err = sh.SetError(scope, "create", "error create new data", err.Error())
 		return dto.UserResponse{}, err
 	}
 
@@ -91,6 +93,7 @@ func (service *UserServiceImpl) Login(input dto.UserLoginRequest) (result dto.Us
 	dataToken := modelToResponse(resultData)
 	token, err := middlewares.CreateToken(dataToken)
 	if err != nil {
+		err = sh.SetError(scope, "create", "error login", err.Error())
 		return result, err
 	}
 
@@ -108,6 +111,7 @@ func (service *UserServiceImpl) GetDetail(userId int) (result dto.UserResponse, 
 		return nil
 	})
 	if err != nil {
+		err = sh.SetError(scope, "create", "error get-detail", err.Error())
 		return result, err
 	}
 
@@ -128,6 +132,7 @@ func (service *UserServiceImpl) GetList(page pagination.Pagination) (result pagi
 		return nil
 	})
 	if err != nil {
+		err = sh.SetError(scope, "create", "error get-list", err.Error())
 		return result, err
 	}
 
@@ -143,6 +148,7 @@ func (service *UserServiceImpl) Delete(userId int) (err error) {
 		return nil
 	})
 	if err != nil {
+		err = sh.SetError(scope, "create", "error delete data", err.Error())
 		return err
 	}
 
@@ -175,6 +181,7 @@ func (service *UserServiceImpl) Update(input dto.UserUpdateRequest, userId int) 
 		return nil
 	})
 	if err != nil {
+		err = sh.SetError(scope, "create", "error update data", err.Error())
 		return result, err
 	}
 
@@ -200,7 +207,7 @@ func (service *UserServiceImpl) Verify(input dto.UserVerifyRequest) (err error) 
 		return nil
 	})
 	if err != nil {
-		fmt.Println("error", err.Error())
+		err = sh.SetError(scope, "create", "error verify", err.Error())
 		return err
 	}
 
@@ -227,6 +234,7 @@ func (service *UserServiceImpl) RefreshVerCode(input dto.UserVerCodeRequest) (er
 		return nil
 	})
 	if err != nil {
+		err = sh.SetError(scope, "create", "error refresh verification code", err.Error())
 		return err
 	}
 

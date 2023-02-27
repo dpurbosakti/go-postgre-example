@@ -6,10 +6,13 @@ import (
 	"learn-echo/features/accounts/model/dto"
 	"learn-echo/features/accounts/repository"
 	"learn-echo/pkg/pagination"
+	sh "learn-echo/pkg/servicehelper"
 	"strings"
 
 	"gorm.io/gorm"
 )
+
+const scope = "account"
 
 type AccountServiceImpl struct {
 	AccountRepository repository.AccountRepository
@@ -40,6 +43,7 @@ func (service *AccountServiceImpl) Create(input dto.AccountCreateRequest, userId
 		return nil
 	})
 	if err != nil {
+		err = sh.SetError(scope, "create", "error create new data", err.Error())
 		return result, err
 	}
 
@@ -56,6 +60,7 @@ func (service *AccountServiceImpl) GetDetail(userId uint) (result dto.AccountRes
 		return nil
 	})
 	if err != nil {
+		err = sh.SetError(scope, "create", "error get-detail", err.Error())
 		return result, err
 	}
 
@@ -76,6 +81,7 @@ func (service *AccountServiceImpl) GetList(page pagination.Pagination) (result p
 		return nil
 	})
 	if err != nil {
+		err = sh.SetError(scope, "create", "error get-list", err.Error())
 		return result, err
 	}
 

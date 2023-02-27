@@ -24,7 +24,7 @@ func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
 			"source":  "gorm",
 			"status":  "unset",
 			"message": "no DSN provided",
-		}).Info("Instantiation")
+		}).Error("Instantiation")
 		return
 	}
 	if c.DbConf.Dialect != "mysql" && c.DbConf.Dialect != "postgres" {
@@ -51,7 +51,7 @@ func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
 			"source":  "gorm",
 			"status":  "panic",
 			"message": "Failed to connect to database!",
-		}).Info("Instantiation")
+		}).Error("Instantiation")
 		logger.Panic(err)
 	} else {
 		DB = db
