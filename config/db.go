@@ -24,7 +24,7 @@ func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
 			"source":  "gorm",
 			"status":  "unset",
 			"message": "no DSN provided",
-		}).Error("Instantiation")
+		}).Error("instantiation")
 		return
 	}
 	if c.DbConf.Dialect != "mysql" && c.DbConf.Dialect != "postgres" {
@@ -33,7 +33,7 @@ func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
 			"source":  "gorm",
 			"status":  "unset",
 			"message": "no proper dialect provided",
-		}).Info("Instantiation")
+		}).Info("instantiation")
 		return
 	}
 
@@ -51,7 +51,7 @@ func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
 			"source":  "gorm",
 			"status":  "panic",
 			"message": "Failed to connect to database!",
-		}).Error("Instantiation")
+		}).Error("instantiation")
 		logger.Panic(err)
 	} else {
 		DB = db
@@ -59,7 +59,7 @@ func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
 			"type":   "db",
 			"source": "gorm",
 			"status": "done",
-		}).Info("Instantiation")
+		}).Info("instantiation")
 	}
 
 	return DB

@@ -70,7 +70,7 @@ func main() {
 			config.Cfg.LoggerConf.WithFields(log.Fields{
 				"status": "closed",
 				"signal": sig,
-			}).Info("Program closed")
+			}).Info("program closed")
 			pprof.StopCPUProfile()
 			os.Exit(1)
 		}
