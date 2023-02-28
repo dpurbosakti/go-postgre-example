@@ -62,7 +62,7 @@ func GetConfig() {
 		"source":  "config",
 		"status":  "done",
 		"message": "config is loaded successfully",
-	}).Info("Loading Config")
+	}).Info("loading config")
 
 }
 
