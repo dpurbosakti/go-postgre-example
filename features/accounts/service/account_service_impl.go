@@ -26,7 +26,7 @@ func NewAccountService(accountRepository repository.AccountRepository, db *gorm.
 	}
 }
 
-func (service *AccountServiceImpl) Create(input dto.AccountCreateRequest, userId uint) (result dto.AccountResponse, err error) {
+func (s *AccountServiceImpl) Create(input dto.AccountCreateRequest, userId uint) (result dto.AccountResponse, err error) {
 	dataAccount := domain.Account{
 		Type:    input.Type,
 		Name:    fmt.Sprintf("bank account user id %d", userId),
@@ -34,8 +34,8 @@ func (service *AccountServiceImpl) Create(input dto.AccountCreateRequest, userId
 		User_Id: userId,
 	}
 
-	err = service.DB.Transaction(func(tx *gorm.DB) error {
-		resultRepo, err := service.AccountRepository.Create(tx, dataAccount)
+	err = s.DB.Transaction(func(tx *gorm.DB) error {
+		resultRepo, err := s.AccountRepository.Create(tx, dataAccount)
 		if err != nil {
 			return err
 		}
@@ -50,9 +50,9 @@ func (service *AccountServiceImpl) Create(input dto.AccountCreateRequest, userId
 	return result, nil
 }
 
-func (service *AccountServiceImpl) GetDetail(userId uint) (result dto.AccountResponse, err error) {
-	err = service.DB.Transaction(func(tx *gorm.DB) error {
-		resultRepo, err := service.AccountRepository.GetDetail(tx, userId)
+func (s *AccountServiceImpl) GetDetail(userId uint) (result dto.AccountResponse, err error) {
+	err = s.DB.Transaction(func(tx *gorm.DB) error {
+		resultRepo, err := s.AccountRepository.GetDetail(tx, userId)
 		if err != nil {
 			return err
 		}
@@ -67,13 +67,13 @@ func (service *AccountServiceImpl) GetDetail(userId uint) (result dto.AccountRes
 	return result, nil
 }
 
-func (service *AccountServiceImpl) GetList(page pagination.Pagination) (result pagination.Pagination, err error) {
+func (s *AccountServiceImpl) GetList(page pagination.Pagination) (result pagination.Pagination, err error) {
 	if page.Sort != "" {
 		tmp := strings.Replace(page.Sort, "_", " ", 1)
 		page.Sort = tmp
 	}
-	err = service.DB.Transaction(func(tx *gorm.DB) error {
-		resultRepo, err := service.AccountRepository.GetList(tx, page)
+	err = s.DB.Transaction(func(tx *gorm.DB) error {
+		resultRepo, err := s.AccountRepository.GetList(tx, page)
 		if err != nil {
 			return err
 		}
