@@ -1,7 +1,7 @@
 package factory
 
 import (
-	accountC "learn-echo/features/accounts/controller"
+	accountH "learn-echo/features/accounts/handler"
 	accountR "learn-echo/features/accounts/repository"
 	accountS "learn-echo/features/accounts/service"
 	userC "learn-echo/features/users/controller"
@@ -13,7 +13,7 @@ import (
 
 type Presenter struct {
 	UserPresenter    userC.UserController
-	AccountPresenter accountC.AccountController
+	AccountPresenter accountH.AccountHandler
 }
 
 func InitFactory(db *gorm.DB) Presenter {
@@ -23,10 +23,10 @@ func InitFactory(db *gorm.DB) Presenter {
 
 	AccountRepository := accountR.NewAccountRepository()
 	AccountService := accountS.NewAccountService(AccountRepository, db)
-	AccountController := accountC.NewAccountController(AccountService)
+	AccountHandler := accountH.NewAccountHandler(AccountService)
 
 	return Presenter{
 		UserPresenter:    UserController,
-		AccountPresenter: AccountController,
+		AccountPresenter: *AccountHandler,
 	}
 }
