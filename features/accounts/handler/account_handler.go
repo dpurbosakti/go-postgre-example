@@ -1,8 +1,8 @@
-package controller
+package handler
 
 import (
-	"learn-echo/features/accounts/model/dto"
-	"learn-echo/features/accounts/service"
+	"learn-echo/features/accounts/models/dto"
+	"learn-echo/features/accounts/models/entities"
 	"learn-echo/middlewares"
 	ch "learn-echo/pkg/controllerhelper"
 	"learn-echo/pkg/pagination"
@@ -12,17 +12,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type AccountControllerImpl struct {
-	AccountService service.AccountService
+type AccountHandler struct {
+	AccountService entities.AccountService
 }
 
-func NewAccountController(accountService service.AccountService) *AccountControllerImpl {
-	return &AccountControllerImpl{
+func NewAccountHandler(accountService entities.AccountService) *AccountHandler {
+	return &AccountHandler{
 		AccountService: accountService,
 	}
 }
 
-func (controller *AccountControllerImpl) Create(c echo.Context) error {
+func (ah *AccountHandler) Create(c echo.Context) error {
 	var accountReq dto.AccountCreateRequest
 	dataToken, _ := middlewares.ExtractToken(c)
 	userId := uint(dataToken.Id)
@@ -37,7 +37,7 @@ func (controller *AccountControllerImpl) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, errVal.Error())
 	}
 
-	result, err := controller.AccountService.Create(accountReq, userId)
+	result, err := ah.AccountService.Create(accountReq, userId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -46,11 +46,11 @@ func (controller *AccountControllerImpl) Create(c echo.Context) error {
 
 }
 
-func (controller *AccountControllerImpl) GetDetail(c echo.Context) error {
+func (ah *AccountHandler) GetDetail(c echo.Context) error {
 	dataToken, _ := middlewares.ExtractToken(c)
 	userId := uint(dataToken.Id)
 
-	result, err := controller.AccountService.GetDetail(userId)
+	result, err := ah.AccountService.GetDetail(userId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -58,7 +58,7 @@ func (controller *AccountControllerImpl) GetDetail(c echo.Context) error {
 	return c.JSON(http.StatusCreated, ch.ResponseOkWithData("get data account success", result))
 }
 
-func (controller *AccountControllerImpl) GetList(c echo.Context) error {
+func (ah *AccountHandler) GetList(c echo.Context) error {
 	var page pagination.Pagination
 	limitInt, _ := strconv.Atoi(c.QueryParam("limit"))
 	pageInt, _ := strconv.Atoi(c.QueryParam("page"))
@@ -66,7 +66,7 @@ func (controller *AccountControllerImpl) GetList(c echo.Context) error {
 	page.Page = pageInt
 	page.Sort = c.QueryParam("sort")
 
-	result, err := controller.AccountService.GetList(page)
+	result, err := ah.AccountService.GetList(page)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, err)
 	}

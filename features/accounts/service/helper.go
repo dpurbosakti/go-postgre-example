@@ -1,8 +1,8 @@
 package service
 
 import (
-	"learn-echo/features/accounts/model/domain"
-	"learn-echo/features/accounts/model/dto"
+	"learn-echo/features/accounts/models/domain"
+	"learn-echo/features/accounts/models/dto"
 )
 
 func modelToResponse(input domain.Account) dto.AccountResponse {
