@@ -60,7 +60,7 @@ func (as *AccountService) GetDetail(userId uint) (result dto.AccountResponse, er
 		return nil
 	})
 	if err != nil {
-		err = sh.SetError(scope, "create", "error get-detail", err.Error())
+		err = sh.SetError(scope, "get-detail", "error get-detail", err.Error())
 		return result, err
 	}
 
@@ -81,7 +81,7 @@ func (as *AccountService) GetList(page pagination.Pagination) (result pagination
 		return nil
 	})
 	if err != nil {
-		err = sh.SetError(scope, "create", "error get-list", err.Error())
+		err = sh.SetError(scope, "get-list", "error get-list", err.Error())
 		return result, err
 	}
 
@@ -89,5 +89,17 @@ func (as *AccountService) GetList(page pagination.Pagination) (result pagination
 }
 
 func (as *AccountService) Delete(userId int) (err error) {
+	err = as.DB.Transaction(func(tx *gorm.DB) error {
+		err := as.AccountRepository.Delete(tx, uint(userId))
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		err = sh.SetError(scope, "delete", "error delete data", err.Error())
+		return err
+	}
+
 	return nil
 }
