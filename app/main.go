@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"learn-echo/config"
 	"learn-echo/factory"
-	"learn-echo/features/users/model/domain"
+	"learn-echo/features/users/models/domain"
 	"learn-echo/migration"
 	"learn-echo/routes"
 	"os"
@@ -22,7 +22,7 @@ import (
 func main() {
 	config.GetConfig()
 
-	db := config.InitDb(config.Cfg, config.Cfg.LoggerConf)
+	db := config.InitDb(config.Cfg)
 	migration.InitMigrate(db)
 
 	presenter := factory.InitFactory(db)

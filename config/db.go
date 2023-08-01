@@ -1,7 +1,7 @@
 package config
 
 import (
-	log "github.com/sirupsen/logrus"
+	logger "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -16,10 +16,10 @@ type DbConf struct {
 	DsnTest      string
 }
 
-func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
+func InitDb(c *Config) (DB *gorm.DB) {
 
 	if c.DbConf.Dsn == "" {
-		logger.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"type":    "db",
 			"source":  "gorm",
 			"status":  "unset",
@@ -28,7 +28,7 @@ func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
 		return
 	}
 	if c.DbConf.Dialect != "mysql" && c.DbConf.Dialect != "postgres" {
-		logger.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"type":    "db",
 			"source":  "gorm",
 			"status":  "unset",
@@ -46,7 +46,7 @@ func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
 
 	db, err := gorm.Open(gormD, &gorm.Config{})
 	if err != nil {
-		logger.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"type":    "db",
 			"source":  "gorm",
 			"status":  "panic",
@@ -55,7 +55,7 @@ func InitDb(c *Config, logger *log.Logger) (DB *gorm.DB) {
 		logger.Panic(err)
 	} else {
 		DB = db
-		logger.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"type":   "db",
 			"source": "gorm",
 			"status": "done",

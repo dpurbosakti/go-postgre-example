@@ -2,8 +2,8 @@ package service
 
 import (
 	"errors"
-	"learn-echo/features/users/model/domain"
-	"learn-echo/features/users/model/dto"
+	"learn-echo/features/users/models/domain"
+	"learn-echo/features/users/models/dto"
 	"learn-echo/features/users/repository"
 	"learn-echo/middlewares"
 	eh "learn-echo/pkg/emailhelper"

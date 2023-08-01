@@ -1,7 +1,7 @@
 package dto
 
 import (
-	m "learn-echo/features/users/model/domain"
+	m "learn-echo/features/users/models/domain"
 	"time"
 
 	"gorm.io/gorm"

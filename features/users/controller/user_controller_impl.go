@@ -2,7 +2,7 @@ package controller
 
 import (
 	"context"
-	"learn-echo/features/users/model/dto"
+	"learn-echo/features/users/models/dto"
 	"learn-echo/features/users/service"
 	"learn-echo/middlewares"
 	ch "learn-echo/pkg/controllerhelper"
