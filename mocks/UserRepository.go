@@ -3,8 +3,8 @@
 package mocks
 
 import (
-	domain "learn-echo/features/users/model/domain"
-	dto "learn-echo/features/users/model/dto"
+	domain "learn-echo/features/users/models/domain"
+	dto "learn-echo/features/users/models/dto"
 
 	gorm "gorm.io/gorm"
 

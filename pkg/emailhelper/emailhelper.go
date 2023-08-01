@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"learn-echo/config"
-	"learn-echo/features/users/model/domain"
+	"learn-echo/features/users/models/domain"
 	"os"
 	"path/filepath"
 

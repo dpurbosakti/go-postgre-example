@@ -1,8 +1,8 @@
 package migration
 
 import (
-	account "learn-echo/features/accounts/model/domain"
-	user "learn-echo/features/users/model/domain"
+	account "learn-echo/features/accounts/models/domain"
+	user "learn-echo/features/users/models/domain"
 
 	"gorm.io/gorm"
 )

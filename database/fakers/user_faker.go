@@ -2,7 +2,7 @@ package fakers
 
 import (
 	"crypto/rand"
-	"learn-echo/features/users/model/domain"
+	"learn-echo/features/users/models/domain"
 	"math/big"
 	"time"
 

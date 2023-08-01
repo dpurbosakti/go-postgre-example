@@ -3,8 +3,8 @@ package service
 import (
 	"errors"
 	"learn-echo/config"
-	"learn-echo/features/users/model/domain"
-	"learn-echo/features/users/model/dto"
+	"learn-echo/features/users/models/domain"
+	"learn-echo/features/users/models/dto"
 	"learn-echo/mocks"
 	"learn-echo/pkg/pagination"
 	"testing"
