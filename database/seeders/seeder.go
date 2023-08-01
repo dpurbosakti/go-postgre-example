@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"learn-echo/config"
 	"learn-echo/database/fakers"
+
+	"github.com/sirupsen/logrus"
 
 	"gorm.io/gorm"
 )
@@ -30,11 +31,12 @@ func DbSeed(db *gorm.DB) error {
 
 func main() {
 	config.GetConfig()
-	fmt.Println(config.Cfg)
+	logger := config.Cfg.LoggerConf.WithField("func", "seeder")
+	// fmt.Println(config.Cfg)
 	db := config.InitDb(config.Cfg)
 	err := DbSeed(db)
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.WithError(err).Error("error when seeding")
 	}
-	fmt.Println("\nseeding done")
+	logger.Info(logrus.WithField("seeding", "done"))
 }

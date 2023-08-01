@@ -3,3 +3,6 @@ build:
 
 run:
 	go run app/main.go
+
+seeder:
+	go run database/seeders/seeder.go
