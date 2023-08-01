@@ -16,6 +16,7 @@ import (
 	"github.com/go-gomail/gomail"
 	"github.com/robfig/cron"
 
+	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -38,7 +39,8 @@ func main() {
 
 		config := config.Cfg
 		var body bytes.Buffer
-		t, err := template.ParseFiles("../pkg/emailhelper/info.html")
+		// t, err := template.ParseFiles("../pkg/emailhelper/info.html")
+		t, err := template.ParseFiles("pkg/emailhelper/info.html")
 		if err != nil {
 			fmt.Println(err.Error())
 		}
@@ -58,7 +60,7 @@ func main() {
 
 			}
 		}
-		fmt.Println("Email sent.")
+		config.LoggerConf.Info(logrus.WithField("email", "sent"))
 	})
 	cron.Start()
 
