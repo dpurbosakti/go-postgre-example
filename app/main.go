@@ -17,7 +17,6 @@ import (
 	"github.com/robfig/cron"
 
 	"github.com/sirupsen/logrus"
-	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -69,7 +68,7 @@ func main() {
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		for sig := range c {
-			config.Cfg.LoggerConf.WithFields(log.Fields{
+			config.Cfg.LoggerConf.WithFields(logrus.Fields{
 				"status": "closed",
 				"signal": sig,
 			}).Info("program closed")
