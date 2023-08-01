@@ -30,11 +30,11 @@ var Cfg *Config
 
 func GetConfig() {
 	// main viper config
-	viper.SetConfigName("config")
-	viper.SetConfigType("yml")
-	viper.AddConfigPath(".")
-	viper.AutomaticEnv()
-
+	// viper.SetConfigName("config")
+	// viper.SetConfigType("yml")
+	// viper.AddConfigPath(".")
+	// viper.AutomaticEnv()
+	viper.SetConfigFile("D:/Belajar/BE/learnEcho2/config.yml")
 	// default values
 	viper.SetDefault("FullName", "mokotest")
 	viper.SetDefault("Version", "0.0.1")
