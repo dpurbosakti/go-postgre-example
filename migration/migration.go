@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitMigrate(Db *gorm.DB) {
-	Db.AutoMigrate(&user.User{})
-	Db.AutoMigrate(&account.Account{})
+func InitMigrate(db *gorm.DB) {
+	db.AutoMigrate(&user.User{})
+	db.AutoMigrate(&account.Account{})
 }
