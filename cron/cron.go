@@ -41,7 +41,8 @@ func InitCron(db *gorm.DB) {
 			d := gomail.NewDialer(config.EmailConf.Host, config.EmailConf.Port, config.EmailConf.Email, config.EmailConf.Password)
 			err = d.DialAndSend(m)
 			if err != nil {
-				fmt.Println("Error sending email:" + err.Error())
+				// fmt.Println("Error sending email:" + err.Error())
+				config.LoggerConf.Error(logrus.WithField("error sending email", err.Error()))
 
 			}
 		}
