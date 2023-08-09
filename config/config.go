@@ -34,8 +34,8 @@ func GetConfig() {
 	// viper.SetConfigType("yml")
 	// viper.AddConfigPath(".")
 	// viper.AutomaticEnv()
-	// viper.SetConfigFile("D:/Belajar/BE/learnEcho2/config.yml") // windows
-	viper.SetConfigFile("/mnt/d/Belajar/BE/learnEcho2/config.yml") // linux
+	viper.SetConfigFile("D:/Belajar/BE/learnEcho2/config.yml") // windows
+	// viper.SetConfigFile("/mnt/d/Belajar/BE/learnEcho2/config.yml") // linux
 	// default values
 	viper.SetDefault("FullName", "mokotest")
 	viper.SetDefault("Version", "0.0.1")

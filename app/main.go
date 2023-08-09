@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"learn-echo/config"
 	"learn-echo/cron"
+	"learn-echo/database/redis"
 	"learn-echo/factory"
 	"learn-echo/migration"
 	"learn-echo/routes"
@@ -19,6 +20,7 @@ func main() {
 
 	db := config.InitDb(config.Cfg)
 	migration.InitMigrate(db)
+	redis.RegisterRedis()
 
 	presenter := factory.InitFactory(db)
 	e := routes.New(presenter)
